@@ -1,0 +1,546 @@
+{%- liquid
+  assign heading = section.settings.heading
+  assign subtitle = section.settings.subtitle
+  assign heading_color = section.settings.heading_color
+  assign name_color = section.settings.name_color
+  assign show_divider = section.settings.show_divider
+-%}
+
+<div
+  id="BackedBy-{{ section.id }}"
+  class="backed-by spacing-style color-{{ section.settings.color_scheme }}"
+  style="
+    {% render 'spacing-style', settings: section.settings %}
+    --backed-by-heading-color: {{ heading_color }};
+    --backed-by-name-color: {{ name_color }};
+  "
+>
+  <div class="backed-by__content">
+    <div class="backed-by__header">
+      {% if heading != blank %}
+        <div class="backed-by__heading">{{ heading }}</div>
+      {% endif %}
+      {% if subtitle != blank %}
+        <p class="backed-by__subtitle">{{ subtitle }}</p>
+      {% endif %}
+    </div>
+
+    {% if show_divider %}
+      <hr class="backed-by__divider">
+    {% endif %}
+
+    <backed-by-carousel class="backed-by__carousel-wrapper">
+      <div class="backed-by__cards">
+        {% for block in section.blocks %}
+          <div
+            class="backed-by__card{% if forloop.first %} is-active{% endif %}"
+            data-index="{{ forloop.index0 }}"
+            {{ block.shopify_attributes }}
+          >
+            <div class="backed-by__card-media">
+              {% if block.settings.image != blank %}
+                {%- liquid
+                  assign img = block.settings.image
+                  assign sizes_val = '(min-width: 750px) 384px, calc(100vw - 24px)'
+                -%}
+                {{
+                  img
+                  | image_url: width: img.width
+                  | image_tag:
+                    sizes: sizes_val,
+                    widths: '369,384,550,750',
+                    loading: 'lazy',
+                    class: 'backed-by__card-img',
+                    alt: img.alt
+                }}
+              {% endif %}
+              <button class="backed-by__play-btn" type="button" aria-label="Play video">
+                <img
+                  src="{{ 'frame-308.svg' | asset_url }}"
+                  alt=""
+                  width="20"
+                  height="20"
+                  loading="lazy"
+                >
+              </button>
+              <button class="backed-by__mute-btn" type="button" aria-label="Mute video">
+                <img
+                  src="{{ 'volume-mute-solid.svg' | asset_url }}"
+                  alt=""
+                  width="24"
+                  height="24"
+                  loading="lazy"
+                >
+              </button>
+            </div>
+
+            <div class="backed-by__card-quote">
+              {% if block.settings.quote != blank %}
+                <p class="backed-by__card-quote-text">&ldquo;{{ block.settings.quote }}&rdquo;</p>
+              {% endif %}
+            </div>
+
+            <div class="backed-by__card-info">
+              {% if block.settings.name != blank %}
+                <p class="backed-by__card-name">{{ block.settings.name }}</p>
+              {% endif %}
+              {% if block.settings.credentials != blank %}
+                <p class="backed-by__card-credentials">{{ block.settings.credentials }}</p>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="backed-by__nav">
+        <button class="backed-by__nav-btn" data-direction="prev" type="button" aria-label="Previous expert">
+          <img
+            src="{{ 'icon-button.svg' | asset_url }}"
+            alt=""
+            width="44"
+            height="32"
+            loading="lazy"
+          >
+        </button>
+        <button class="backed-by__nav-btn" data-direction="next" type="button" aria-label="Next expert">
+          <img
+            src="{{ 'icon-button-2.svg' | asset_url }}"
+            alt=""
+            width="44"
+            height="32"
+            loading="lazy"
+          >
+        </button>
+      </div>
+    </backed-by-carousel>
+
+    {% if show_divider %}
+      <hr class="backed-by__divider">
+    {% endif %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .backed-by__content {
+    max-width: 1200px;
+    margin-inline: auto;
+    width: 100%;
+    padding-inline: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .backed-by__header {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    align-items: center;
+    text-align: center;
+  }
+
+  .backed-by__heading {
+    font-family: var(--font-heading--family);
+    font-weight: 400;
+    font-size: 48px;
+    line-height: 52px;
+    letter-spacing: -1px;
+    color: var(--backed-by-heading-color, #767676);
+    margin: 0;
+
+    & p {
+      margin: 0;
+    }
+
+    & strong {
+      font-family: var(--font-body--family);
+      font-weight: 700;
+    }
+  }
+
+  .backed-by__subtitle {
+    font-family: var(--font-body--family);
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+    color: var(--backed-by-heading-color, #767676);
+    margin: 0;
+  }
+
+  .backed-by__divider {
+    border: none;
+    border-top: 1px solid #D9D9DB;
+    margin: 0;
+    width: 100%;
+  }
+
+  .backed-by__carousel-wrapper {
+    display: block;
+  }
+
+  .backed-by__cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .backed-by__card {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .backed-by__card-media {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    aspect-ratio: 384 / 364;
+  }
+
+  .backed-by__card-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .backed-by__play-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+
+  .backed-by__play-btn img {
+    display: block;
+    width: 20px;
+    height: 20px;
+  }
+
+  .backed-by__mute-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 24px;
+    height: 24px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: none;
+  }
+
+  .backed-by__mute-btn img {
+    display: block;
+    width: 24px;
+    height: 24px;
+  }
+
+  .backed-by__card-quote {
+    padding-inline: 8px;
+  }
+
+  .backed-by__card-quote-text {
+    font-family: var(--font-heading--family);
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 32px;
+    letter-spacing: -1px;
+    color: #414141;
+    margin: 0;
+  }
+
+  .backed-by__card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-inline: 8px;
+  }
+
+  .backed-by__card-name {
+    font-family: var(--font-body--family);
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 24px;
+    color: var(--backed-by-name-color, #BC0F0F);
+    margin: 0;
+  }
+
+  .backed-by__card-credentials {
+    font-family: var(--font-body--family);
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 24px;
+    letter-spacing: -0.5px;
+    color: #767676;
+    margin: 0;
+  }
+
+  .backed-by__nav {
+    display: none;
+  }
+
+  @media screen and (max-width: 749px) {
+    .backed-by__content {
+      gap: 20px;
+    }
+
+    .backed-by__header {
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    .backed-by__heading {
+      font-size: 32px;
+      line-height: 36px;
+    }
+
+    .backed-by__subtitle {
+      font-size: 18px;
+      line-height: 20px;
+    }
+
+    .backed-by__cards {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .backed-by__card {
+      display: none;
+    }
+
+    .backed-by__card.is-active {
+      display: flex;
+    }
+
+    .backed-by__mute-btn {
+      display: block;
+    }
+
+    .backed-by__card-quote-text {
+      font-size: 24px;
+      line-height: 32px;
+    }
+
+    .backed-by__card-name {
+      font-size: 18px;
+      line-height: 20px;
+    }
+
+    .backed-by__card-credentials {
+      font-size: 16px;
+      line-height: 20px;
+    }
+
+    .backed-by__nav {
+      display: flex;
+      justify-content: flex-end;
+      gap: 2px;
+      align-items: center;
+    }
+  }
+
+  .backed-by__nav-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .backed-by__nav-btn img {
+    display: block;
+    width: 44px;
+    height: 32px;
+  }
+{% endstylesheet %}
+
+<script>
+  if (!customElements.get('backed-by-carousel')) {
+    class BackedByCarousel extends HTMLElement {
+      connectedCallback() {
+        this.activeIndex = 0;
+        this.cards = this.querySelectorAll('.backed-by__card');
+        this.totalCards = this.cards.length;
+
+        this.addEventListener('click', this.handleClick.bind(this));
+      }
+
+      handleClick(event) {
+        const btn = event.target.closest('.backed-by__nav-btn');
+        if (!btn || !this.contains(btn)) return;
+
+        const direction = btn.dataset.direction;
+
+        if (direction === 'next') {
+          this.activeIndex = (this.activeIndex + 1) % this.totalCards;
+        } else if (direction === 'prev') {
+          this.activeIndex = (this.activeIndex - 1 + this.totalCards) % this.totalCards;
+        }
+
+        for (const card of this.cards) {
+          const index = parseInt(card.dataset.index, 10);
+          if (index === this.activeIndex) {
+            card.classList.add('is-active');
+          } else {
+            card.classList.remove('is-active');
+          }
+        }
+      }
+    }
+
+    customElements.define('backed-by-carousel', BackedByCarousel);
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Backed By",
+  "tag": "section",
+  "class": "backed-by-wrapper section-wrapper",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "<p>Backed by <strong>6000+</strong> cardiologists and scientists</p>"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Founded on Nobel Prize-Winning Science. Validated in Real Life."
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#767676"
+    },
+    {
+      "type": "color",
+      "id": "name_color",
+      "label": "Expert name color",
+      "default": "#BC0F0F"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_divider",
+      "label": "Show dividers",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-2"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 80,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 80,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "expert-card",
+      "name": "Expert card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Quote",
+          "default": "No other brand would dare call a cardiologist. Humann did."
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "default": "Dr. Christopher Davis, MD"
+        },
+        {
+          "type": "textarea",
+          "id": "credentials",
+          "label": "Credentials",
+          "default": "Chief Cardiologist at Humann, Triple Board-Certified Interventional Cardiologist, Fellow of the American College of Cardiology"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Backed By",
+      "category": "t:categories.storytelling",
+      "blocks": [
+        {
+          "type": "expert-card",
+          "settings": {
+            "quote": "No other brand would dare call a cardiologist. Humann did.",
+            "name": "Dr. Christopher Davis, MD",
+            "credentials": "Chief Cardiologist at Humann, Triple Board-Certified Interventional Cardiologist, Fellow of the American College of Cardiology"
+          }
+        },
+        {
+          "type": "expert-card",
+          "settings": {
+            "quote": "Humann makes the science feel accessible and actionable.",
+            "name": "Yousef Elyaman, MD",
+            "credentials": "Medical Director at Humann, Board Certified in Internal Medicine and Integrative Medicine from the American Board of Physician Specialties"
+          }
+        },
+        {
+          "type": "expert-card",
+          "settings": {
+            "quote": "It's refreshing to see a company take science seriously.",
+            "name": "Penny Kris-Etherton, PhD",
+            "credentials": "Science Advisory Board Member at Humann, past chair of the American Heart Association Council on Lifestyle and Cardiometabolic"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
