@@ -1,12 +1,21 @@
 {%- capture star_full_svg -%}
-<svg class="bestsellers__star" width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M18.96 7.8418L12.6025 7.17041L10 1.33301L7.39746 7.17041L1.04004 7.8418L5.78857 12.1216L4.46289 18.374L10 15.1807L15.5371 18.374L14.2114 12.1216L18.96 7.8418Z" fill="currentColor"/></svg>
+<svg class="bestsellers__star" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M18.96 7.8418L12.6025 7.17041L10 1.33301L7.39746 7.17041L1.04004 7.8418L5.78857 12.1216L4.46289 18.374L10 15.1807L15.5371 18.374L14.2114 12.1216L18.96 7.8418Z" fill="currentColor"/></svg>
 {%- endcapture -%}
 
 {%- capture star_half_svg -%}
-<svg class="bestsellers__star" width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1.33301L7.39746 7.17041L1.04004 7.8418L5.78857 12.1216L4.46289 18.374L10 15.1807V1.33301Z" fill="currentColor"/></svg>
+<svg class="bestsellers__star" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1.33301L7.39746 7.17041L1.04004 7.8418L5.78857 12.1216L4.46289 18.374L10 15.1807V1.33301Z" fill="currentColor"/></svg>
 {%- endcapture -%}
 
-<div
+{% liquid
+  assign card_count = 0
+  for block in section.blocks
+    if block.type == 'product-card'
+      assign card_count = card_count | plus: 1
+    endif
+  endfor
+%}
+
+<bestsellers-carousel
   id="Bestsellers-{{ section.id }}"
   class="bestsellers spacing-style"
   style="
@@ -15,47 +24,74 @@
     --heading-bold-color: {{ section.settings.heading_bold_color }};
     --star-color: {{ section.settings.star_color }};
     --divider-color: {{ section.settings.divider_color }};
+    --bg-color: {{ section.settings.background_color }};
+    --card-border-color: {{ section.settings.card_border_color }};
+    --button-bg-color: {{ section.settings.button_bg_color }};
+    --button-text-color: {{ section.settings.button_text_color }};
   "
+  data-card-count="{{ card_count }}"
 >
-  <div class="bestsellers__header">
-    {% if section.settings.heading != blank %}
-      <div class="bestsellers__heading">{{ section.settings.heading }}</div>
-    {% endif %}
-    {% if section.settings.show_divider %}
-      <hr class="bestsellers__divider">
-    {% endif %}
-  </div>
+  <div class="bestsellers__inner">
+    <div class="bestsellers__header">
+      <div class="bestsellers__header-row">
+        {% if section.settings.heading != blank %}
+          <div class="bestsellers__heading bestsellers__heading--desktop">{{ section.settings.heading }}</div>
+        {% endif %}
+        {% if section.settings.mobile_heading != blank %}
+          <div class="bestsellers__heading bestsellers__heading--mobile">{{ section.settings.mobile_heading }}</div>
+        {% endif %}
 
-  <div class="bestsellers__carousel">
-    {% for block in section.blocks %}
-      {% if block.type == 'product-card' %}
-        <div class="bestsellers__card" {{ block.shopify_attributes }}>
-          <div class="bestsellers__card-image">
-            <picture>
-              {% if block.settings.mobile_image != blank %}
-                <source
-                  media="(max-width: 749px)"
-                  srcset="{{ block.settings.mobile_image | image_url: width: 600 }}"
-                >
-              {% endif %}
-              {% if block.settings.image != blank %}
-                <img
-                  class="bestsellers__card-img"
-                  src="{{ block.settings.image | image_url: width: 800 }}"
-                  alt="{{ block.settings.product_title | escape }}"
-                  loading="lazy"
-                  style="object-fit: {{ block.settings.image_fit }}"
-                >
-              {% endif %}
-            </picture>
-          </div>
+        <div class="bestsellers__nav">
+          <button type="button" class="bestsellers__nav-btn" data-direction="prev" aria-label="Previous slide">
+            <img src="{{ 'carousel-arrows-3.svg' | asset_url }}" alt="" width="50" height="50" loading="lazy">
+          </button>
+          <button type="button" class="bestsellers__nav-btn" data-direction="next" aria-label="Next slide">
+            <img src="{{ 'carousel-arrows-4.svg' | asset_url }}" alt="" width="50" height="50" loading="lazy">
+          </button>
+        </div>
 
-          <div class="bestsellers__card-content">
-            <h3 class="bestsellers__card-title">{{ block.settings.product_title }}</h3>
+        {% if section.settings.mobile_link_text != blank %}
+          <a
+            {% if section.settings.mobile_link_url != blank %}href="{{ section.settings.mobile_link_url }}"{% endif %}
+            class="bestsellers__mobile-link"
+          >
+            {{ section.settings.mobile_link_text }}
+          </a>
+        {% endif %}
+      </div>
+    </div>
 
-            <div class="bestsellers__card-meta">
+    <div class="bestsellers__carousel" data-carousel>
+      {% assign card_index = 0 %}
+      {% for block in section.blocks %}
+        {% if block.type == 'product-card' %}
+          {% assign card_index = card_index | plus: 1 %}
+          <div
+            class="bestsellers__card{% if card_index == 1 %} bestsellers__card--first{% endif %}{% if card_index == card_count %} bestsellers__card--last{% endif %}"
+            {{ block.shopify_attributes }}
+          >
+            {% if block.settings.image != blank %}
+              <div class="bestsellers__card-image">
+                <picture>
+                  {% if block.settings.mobile_image != blank %}
+                    <source
+                      media="(max-width: 749px)"
+                      srcset="{{ block.settings.mobile_image | image_url: width: 600 }}"
+                    >
+                  {% endif %}
+                  <img
+                    class="bestsellers__card-img"
+                    src="{{ block.settings.image | image_url: width: 800 }}"
+                    alt="{{ block.settings.product_title | escape }}"
+                    loading="lazy"
+                    style="object-fit: {{ block.settings.image_fit }}"
+                  >
+                </picture>
+              </div>
+            {% endif %}
+
+            <div class="bestsellers__card-content">
               <div class="bestsellers__card-reviews">
-                <span class="bestsellers__card-score">{{ block.settings.rating_score }}</span>
                 <div class="bestsellers__card-stars" role="img" aria-label="{{ block.settings.rating_score }} out of 5 stars">
                   {%- for i in (1..block.settings.full_stars) -%}
                     {{ star_full_svg }}
@@ -64,63 +100,139 @@
                     {{ star_half_svg }}
                   {%- endif -%}
                 </div>
-                <span class="bestsellers__card-count">{{ block.settings.review_count }}</span>
+                {% if block.settings.review_count != blank %}
+                  <span class="bestsellers__card-count">{{ block.settings.review_count }}</span>
+                {% endif %}
               </div>
 
-              {% if block.settings.badge_text != blank %}
-                <span class="bestsellers__card-badge bestsellers__card-badge--{{ block.settings.badge_style }}">{{ block.settings.badge_text }}</span>
+              <div class="bestsellers__card-info">
+                <h3 class="bestsellers__card-title">{{ block.settings.product_title }}</h3>
+                {% if block.settings.subtitle != blank %}
+                  <span class="bestsellers__card-subtitle">{{ block.settings.subtitle }}</span>
+                {% endif %}
+              </div>
+
+              {% if block.settings.price_text != blank %}
+                <span class="bestsellers__card-price">{{ block.settings.price_text }}</span>
               {% endif %}
             </div>
-
-            {% if block.settings.description != blank %}
-              <p class="bestsellers__card-description">{{ block.settings.description }}</p>
-            {% endif %}
-
-            <div class="bestsellers__card-cta">
-              <a
-                {% if block.settings.cta_url != blank %}href="{{ block.settings.cta_url }}"{% endif %}
-                class="bestsellers__card-link"
-              >
-                {{ block.settings.cta_text }}
-              </a>
-            </div>
           </div>
-        </div>
-      {% endif %}
-    {% endfor %}
-  </div>
+        {% endif %}
+      {% endfor %}
+    </div>
 
-  <div class="bestsellers__footer">
-    <a
-      {% if section.settings.button_url != blank %}href="{{ section.settings.button_url }}"{% endif %}
-      class="bestsellers__button"
-    >
-      {{ section.settings.button_text }}
-    </a>
+    <div class="bestsellers__progress-row">
+      <div class="bestsellers__progress-track">
+        <div class="bestsellers__progress-fill" data-progress></div>
+      </div>
+      <span class="bestsellers__counter" data-counter>1/{{ card_count }}</span>
+    </div>
+
+    {% if section.settings.button_text != blank %}
+      <div class="bestsellers__footer">
+        <a
+          {% if section.settings.button_url != blank %}href="{{ section.settings.button_url }}"{% endif %}
+          class="bestsellers__button"
+        >
+          {{ section.settings.button_text }}
+        </a>
+      </div>
+    {% endif %}
   </div>
-</div>
+</bestsellers-carousel>
+
+<script>
+  if (!customElements.get('bestsellers-carousel')) {
+    class BestsellersCarousel extends HTMLElement {
+      connectedCallback() {
+        this.carousel = this.querySelector('[data-carousel]');
+        this.progressFill = this.querySelector('[data-progress]');
+        this.counter = this.querySelector('[data-counter]');
+        this.cardCount = parseInt(this.dataset.cardCount) || 0;
+
+        if (!this.carousel) return;
+
+        this.addEventListener('click', (event) => {
+          const btn = event.target.closest('[data-direction]');
+          if (btn) this.navigate(btn.dataset.direction);
+        });
+
+        this.carousel.addEventListener('scroll', () => {
+          if (this._raf) cancelAnimationFrame(this._raf);
+          this._raf = requestAnimationFrame(() => this.updateProgress());
+        });
+
+        this.updateProgress();
+      }
+
+      navigate(direction) {
+        const card = this.carousel.querySelector('.bestsellers__card');
+        if (!card) return;
+        const scrollAmount = direction === 'next' ? card.offsetWidth : -card.offsetWidth;
+        this.carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+      }
+
+      updateProgress() {
+        if (!this.carousel || this.cardCount === 0) return;
+
+        const { scrollLeft, scrollWidth, clientWidth } = this.carousel;
+        const maxScroll = scrollWidth - clientWidth;
+
+        if (this.progressFill) {
+          const ratio = clientWidth / scrollWidth;
+          const fillWidth = ratio * 100;
+          const position = maxScroll > 0 ? (scrollLeft / maxScroll) * (100 - fillWidth) : 0;
+          this.progressFill.style.width = fillWidth + '%';
+          this.progressFill.style.left = position + '%';
+        }
+
+        if (this.counter) {
+          const card = this.carousel.querySelector('.bestsellers__card');
+          if (card) {
+            const cardWidth = card.offsetWidth;
+            const cardsVisible = Math.max(1, Math.round(clientWidth / cardWidth));
+            const totalPages = Math.max(1, Math.ceil(this.cardCount / cardsVisible));
+            const currentPage = maxScroll > 0
+              ? Math.min(Math.round(scrollLeft / (cardWidth * cardsVisible)) + 1, totalPages)
+              : 1;
+            this.counter.textContent = currentPage + '/' + totalPages;
+          }
+        }
+      }
+    }
+
+    customElements.define('bestsellers-carousel', BestsellersCarousel);
+  }
+</script>
 
 {% stylesheet %}
   .bestsellers {
     display: flex;
     flex-direction: column;
-    gap: 24px;
-    background: #FFFFFF;
+    background: var(--bg-color);
   }
 
-  .bestsellers__header {
+  .bestsellers__inner {
     max-width: 1200px;
     width: 100%;
     margin-inline: auto;
     padding-inline: 12px;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .bestsellers__header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
   }
 
   .bestsellers__heading {
     font-family: var(--font-heading--family);
     font-weight: 400;
-    font-size: 48px;
-    line-height: 52px;
     color: var(--heading-color);
 
     & p {
@@ -134,22 +246,62 @@
     }
   }
 
-  .bestsellers__divider {
+  .bestsellers__heading--desktop {
+    font-size: 42px;
+    line-height: 55px;
+    letter-spacing: -0.84px;
+  }
+
+  .bestsellers__heading--mobile {
+    display: none;
+  }
+
+  .bestsellers__nav {
+    display: flex;
+    align-items: center;
+    gap: 19px;
+    flex-shrink: 0;
+  }
+
+  .bestsellers__nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
     border: none;
-    border-bottom: 1px solid var(--divider-color);
-    margin: 0;
-    margin-top: 16px;
+    background: none;
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    flex-shrink: 0;
+
+    & img {
+      display: block;
+      width: 50px;
+      height: 50px;
+    }
+  }
+
+  .bestsellers__mobile-link {
+    display: none;
+    font-family: var(--font-heading--family);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #202635;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
 
   .bestsellers__carousel {
     display: flex;
-    gap: 16px;
+    gap: 0;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    padding-inline-start: max(120px, calc((100vw - 1200px) / 2));
-    padding-inline-end: 20px;
 
     &::-webkit-scrollbar {
       display: none;
@@ -157,97 +309,56 @@
   }
 
   .bestsellers__card {
-    flex: 0 0 340px;
-    border-radius: 16px;
+    flex: 0 0 25%;
+    border: 1px solid var(--card-border-color);
+    border-radius: 0;
     overflow: hidden;
-    scroll-snap-align: start;
-    background: #F5F5F5;
+    background: var(--bg-color);
     display: flex;
     flex-direction: column;
+    scroll-snap-align: start;
 
-    &:first-child {
-      flex: 0 0 374px;
-      border-radius: 18px;
+    &:not(.bestsellers__card--first) {
+      margin-inline-start: -1px;
     }
+  }
+
+  .bestsellers__card--first {
+    border-radius: 5px 0 0 5px;
+  }
+
+  .bestsellers__card--last {
+    border-radius: 0 5px 5px 0;
+  }
+
+  .bestsellers__card--first.bestsellers__card--last {
+    border-radius: 5px;
   }
 
   .bestsellers__card-image {
-    height: 258px;
-    overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
-    background: inherit;
-
-    .bestsellers__card:first-child & {
-      height: 273px;
-    }
+    padding-block: 28px;
   }
 
   .bestsellers__card-img {
-    width: 100%;
-    height: 100%;
+    width: 71%;
+    aspect-ratio: 1;
+    display: block;
   }
 
   .bestsellers__card-content {
-    padding: 20px;
+    padding: 24px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    flex: 1;
-    justify-content: flex-end;
-
-    .bestsellers__card:first-child & {
-      padding: 22px;
-    }
-  }
-
-  .bestsellers__card-title {
-    font-family: var(--font-body--family);
-    font-weight: 700;
-    font-size: 20px;
-    line-height: 24px;
-    color: #414141;
-    margin: 0;
-
-    .bestsellers__card:first-child & {
-      font-size: 22px;
-      line-height: 26px;
-    }
-  }
-
-  .bestsellers__card-meta {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding: 8px 0;
-
-    .bestsellers__card:first-child & {
-      gap: 8.8px;
-      padding: 8.8px 0;
-    }
+    gap: 6px;
   }
 
   .bestsellers__card-reviews {
     display: flex;
     align-items: center;
-    gap: 2px;
-    padding-right: 4px;
-  }
-
-  .bestsellers__card-score {
-    font-family: var(--font-subheading--family);
-    font-weight: 500;
-    font-size: 18px;
-    line-height: 24px;
-    letter-spacing: -0.5px;
-    color: var(--star-color);
-
-    .bestsellers__card:first-child & {
-      font-size: 19.8px;
-      line-height: 26px;
-      letter-spacing: -0.55px;
-    }
+    gap: 6px;
   }
 
   .bestsellers__card-stars {
@@ -257,13 +368,8 @@
     color: var(--star-color);
 
     & svg {
-      width: 20px;
-      height: 20px;
-    }
-
-    .bestsellers__card:first-child & svg {
-      width: 22px;
-      height: 22px;
+      width: 14px;
+      height: 13px;
     }
   }
 
@@ -273,251 +379,177 @@
   }
 
   .bestsellers__card-count {
-    font-family: var(--font-subheading--family);
-    font-weight: 500;
-    font-size: 18px;
-    line-height: 24px;
-    letter-spacing: -0.5px;
-    color: #767676;
-
-    .bestsellers__card:first-child & {
-      font-size: 19.8px;
-      line-height: 26px;
-      letter-spacing: -0.55px;
-    }
-  }
-
-  .bestsellers__card-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 4px;
-    padding: 4px 12px;
-    font-family: var(--font-subheading--family);
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 20px;
-    width: fit-content;
-
-    &--filled {
-      background: #767676;
-      color: #FFFFFF;
-    }
-
-    &--light {
-      background: #FFFFFF;
-      color: #767676;
-    }
-
-    .bestsellers__card:first-child & {
-      font-size: 17.6px;
-      line-height: 22px;
-    }
-  }
-
-  .bestsellers__card-description {
     font-family: var(--font-heading--family);
     font-weight: 400;
-    font-size: 18px;
-    line-height: 24px;
-    letter-spacing: -0.5px;
-    color: #767676;
-    margin: 0;
-
-    .bestsellers__card:first-child & {
-      font-size: 19.8px;
-      line-height: 26px;
-      letter-spacing: -0.55px;
-    }
-  }
-
-  .bestsellers__card-cta {
-    padding: 8px 0;
-  }
-
-  .bestsellers__card-link {
-    font-family: var(--font-subheading--family);
-    font-weight: 500;
     font-size: 14px;
-    line-height: 16px;
-    color: #414141;
-    text-decoration: underline;
-    text-underline-offset: 3px;
+    line-height: 21px;
+    color: #202635;
+  }
 
-    .bestsellers__card:first-child & {
-      font-size: 19.8px;
-      line-height: 26px;
-      letter-spacing: -0.55px;
-    }
+  .bestsellers__card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .bestsellers__card-title {
+    font-family: var(--font-heading--family);
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 28px;
+    color: #202635;
+    margin: 0;
+  }
+
+  .bestsellers__card-subtitle {
+    font-family: var(--font-heading--family);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 21px;
+    color: #797D86;
+  }
+
+  .bestsellers__card-price {
+    font-family: var(--font-heading--family);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 21px;
+    color: #202635;
+  }
+
+  .bestsellers__progress-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .bestsellers__progress-track {
+    flex: 1;
+    height: 2px;
+    background: #D3D8DD;
+    border-radius: 1px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .bestsellers__progress-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: #202635;
+    border-radius: 1px;
+    width: 25%;
+    transition: width 0.15s ease, left 0.15s ease;
+  }
+
+  .bestsellers__counter {
+    font-family: var(--font-body--family);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0.56px;
+    text-transform: uppercase;
+    color: #202635;
+    white-space: nowrap;
   }
 
   .bestsellers__footer {
-    max-width: 1200px;
-    width: 100%;
-    margin-inline: auto;
-    padding-inline: 12px;
-    padding-block: 8px;
-    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
   }
 
   .bestsellers__button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border: 2px solid #000000;
-    border-radius: 28px;
-    padding: 12px 20px;
-    font-family: var(--font-accent--family);
+    background: var(--button-bg-color);
+    color: var(--button-text-color);
+    border: none;
+    border-radius: 57px;
+    padding: 10px 34px 13px 34px;
+    font-family: var(--font-heading--family);
     font-weight: 400;
     font-size: 16px;
-    line-height: 16px;
-    letter-spacing: 0.75px;
-    text-transform: uppercase;
-    color: #000000;
+    line-height: 23px;
+    text-align: center;
     text-decoration: none;
-    background: transparent;
-    transition: background 0.2s, color 0.2s;
+    cursor: pointer;
+    transition: opacity 0.2s;
 
     &:hover {
-      background: #000000;
-      color: #FFFFFF;
+      opacity: 0.9;
     }
   }
 
   @media screen and (max-width: 749px) {
-    .bestsellers {
-      background: #F5F5F5;
-      gap: 20px;
+    .bestsellers__inner {
+      gap: 16px;
     }
 
-    .bestsellers__heading {
-      line-height: 36px;
+    .bestsellers__heading--desktop {
+      display: none;
+    }
+
+    .bestsellers__heading--mobile {
+      display: block;
+      font-size: 26px;
+      line-height: 34px;
+      letter-spacing: -0.52px;
+    }
+
+    .bestsellers__nav {
+      display: none;
+    }
+
+    .bestsellers__mobile-link {
+      display: block;
     }
 
     .bestsellers__carousel {
-      padding-inline-start: 12px;
-      padding-inline-end: 12px;
+      margin-inline: -12px;
+      padding-inline: 12px;
     }
 
     .bestsellers__card {
-      flex: 0 0 280px;
-      background: #FFFFFF;
-
-      &:first-child {
-        flex: 0 0 280px;
-        border-radius: 16px;
-      }
+      flex: 0 0 292px;
     }
 
     .bestsellers__card-image {
-      height: 190px;
-
-      .bestsellers__card:first-child & {
-        height: 182px;
-      }
+      padding-block: 24px;
     }
 
     .bestsellers__card-content {
-      padding: 16px;
-
-      .bestsellers__card:first-child & {
-        padding: 16px;
-      }
-    }
-
-    .bestsellers__card-title {
-      font-size: 18px;
-      line-height: 20px;
-
-      .bestsellers__card:first-child & {
-        font-size: 18px;
-        line-height: 20px;
-      }
-    }
-
-    .bestsellers__card-meta {
-      .bestsellers__card:first-child & {
-        gap: 8px;
-        padding: 8px 0;
-      }
-    }
-
-    .bestsellers__card-score {
-      font-size: 16px;
-      line-height: 20px;
-      letter-spacing: -0.5px;
-
-      .bestsellers__card:first-child & {
-        font-size: 16px;
-        line-height: 20px;
-        letter-spacing: -0.5px;
-      }
-    }
-
-    .bestsellers__card-stars {
-      & svg {
-        width: 20px;
-        height: 20px;
-      }
-
-      .bestsellers__card:first-child & svg {
-        width: 20px;
-        height: 20px;
-      }
+      padding: 18px;
     }
 
     .bestsellers__card-count {
+      font-size: 10px;
+      line-height: 15px;
+      letter-spacing: 0.1px;
+    }
+
+    .bestsellers__card-title {
       font-size: 16px;
-      line-height: 20px;
-
-      .bestsellers__card:first-child & {
-        font-size: 16px;
-        line-height: 20px;
-      }
+      line-height: 22px;
     }
 
-    .bestsellers__card-badge {
-      font-size: 14px;
-      line-height: 18px;
-
-      &--light {
-        background: #F5F5F5;
-      }
-
-      .bestsellers__card:first-child & {
-        font-size: 14px;
-        line-height: 18px;
-      }
+    .bestsellers__card-subtitle {
+      font-size: 10px;
+      line-height: 15px;
+      letter-spacing: 0.1px;
     }
 
-    .bestsellers__card-description {
-      font-size: 16px;
-      line-height: 20px;
-      letter-spacing: -0.5px;
-      color: #414141;
-
-      .bestsellers__card:first-child & {
-        font-size: 16px;
-        line-height: 20px;
-        letter-spacing: -0.5px;
-      }
+    .bestsellers__card-price {
+      font-size: 10px;
+      line-height: 15px;
+      letter-spacing: 0.1px;
     }
 
-    .bestsellers__card-link {
-      font-size: 14px;
-      line-height: 18px;
-
-      .bestsellers__card:first-child & {
-        font-size: 14px;
-        line-height: 18px;
-        letter-spacing: 0;
-      }
-    }
-
-    .bestsellers__button {
-      width: 100%;
-      font-size: 14px;
+    .bestsellers__counter {
+      font-size: 10px;
       line-height: 14px;
+      letter-spacing: 0.4px;
     }
   }
 {% endstylesheet %}
@@ -539,7 +571,13 @@
       "type": "richtext",
       "id": "heading",
       "label": "Heading",
-      "default": "<p><strong>Bestsellers</strong> for cardiovascular support.</p>"
+      "default": "<p>Shop Best Sellers</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "mobile_heading",
+      "label": "Mobile heading",
+      "default": "<p>Shop by System</p>"
     },
     {
       "type": "checkbox",
@@ -551,12 +589,23 @@
       "type": "text",
       "id": "button_text",
       "label": "Button text",
-      "default": "Shop All"
+      "default": "Shop All Products"
     },
     {
       "type": "url",
       "id": "button_url",
       "label": "Button link"
+    },
+    {
+      "type": "text",
+      "id": "mobile_link_text",
+      "label": "Mobile link text",
+      "default": "Shop All"
+    },
+    {
+      "type": "url",
+      "id": "mobile_link_url",
+      "label": "Mobile link URL"
     },
     {
       "type": "header",
@@ -578,13 +627,37 @@
       "type": "color",
       "id": "star_color",
       "label": "Star color",
-      "default": "#BC0F0F"
+      "default": "#3383C5"
     },
     {
       "type": "color",
       "id": "divider_color",
       "label": "Divider color",
       "default": "#D0D0D0"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#F2F7FB"
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Card border color",
+      "default": "#D3D8DD"
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Button background",
+      "default": "#3383C5"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#FFFFFF"
     },
     {
       "type": "color_scheme",
@@ -653,6 +726,17 @@
           "type": "text",
           "id": "product_title",
           "label": "Title"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Subtitle"
+        },
+        {
+          "type": "text",
+          "id": "price_text",
+          "label": "Price",
+          "default": "From $XX.XX"
         },
         {
           "type": "text",

@@ -279,7 +279,9 @@
             "badge_text": "#1 cardiologist recommended",
             "badge_style": "filled",
             "description": "Our signature product – supporting healthy blood pressure",
-            "cta_text": "Shop Now"
+            "cta_text": "Shop Now",
+            "subtitle": "24oz",
+            "price_text": "From $XX.XX"
           }
         },
         "card_2": {
@@ -294,7 +296,9 @@
             "badge_text": "1.2M+ sold",
             "badge_style": "light",
             "description": "Daily heart support, scoop by scoop.",
-            "cta_text": "Shop Now"
+            "cta_text": "Shop Now",
+            "subtitle": "24oz",
+            "price_text": "From $XX.XX"
           }
         },
         "card_3": {
@@ -309,7 +313,9 @@
             "badge_text": "800K+ sold",
             "badge_style": "light",
             "description": "Daily support for healthy blood flow.",
-            "cta_text": "Shop Now"
+            "cta_text": "Shop Now",
+            "subtitle": "24oz",
+            "price_text": "From $XX.XX"
           }
         },
         "card_4": {
@@ -324,7 +330,9 @@
             "badge_text": "Athlete's choice",
             "badge_style": "light",
             "description": "Clean energy for your next session.",
-            "cta_text": "Shop Now"
+            "cta_text": "Shop Now",
+            "subtitle": "24oz",
+            "price_text": "From $XX.XX"
           }
         }
       },
@@ -335,13 +343,19 @@
         "card_4"
       ],
       "settings": {
-        "heading": "<p><strong>Bestsellers<\/strong> for cardiovascular support.<\/p>",
+        "heading": "<p>Shop Best Sellers<\/p>",
+        "mobile_heading": "<p>Shop by System<\/p>",
         "show_divider": true,
-        "button_text": "Shop All",
+        "button_text": "Shop All Products",
+        "mobile_link_text": "Shop All",
         "heading_color": "#767676",
         "heading_bold_color": "#767676",
-        "star_color": "#BC0F0F",
+        "star_color": "#3383C5",
         "divider_color": "#D0D0D0",
+        "background_color": "#F2F7FB",
+        "card_border_color": "#D3D8DD",
+        "button_bg_color": "#3383C5",
+        "button_text_color": "#FFFFFF",
         "padding-block-start": 80,
         "padding-block-end": 80
       }
