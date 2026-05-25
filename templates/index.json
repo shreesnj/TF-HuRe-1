@@ -661,6 +661,96 @@
         "padding-block-start": 80,
         "padding-block-end": 80
       }
+    },
+    "ingredients": {
+      "type": "ingredients",
+      "blocks": {
+        "card_1": {
+          "type": "ingredient-card",
+          "settings": {
+            "image": "shopify://shop_images/card-mobile-31614157.png",
+            "title": "Black Garlic"
+          }
+        },
+        "card_2": {
+          "type": "ingredient-card",
+          "settings": {
+            "image": "shopify://shop_images/card-mobile-31614158.png",
+            "title": "Grape Seed Extract"
+          }
+        },
+        "card_3": {
+          "type": "ingredient-card",
+          "settings": {
+            "image": "shopify://shop_images/card-mobile-31614159.jpg",
+            "title": "Beet Root"
+          }
+        },
+        "card_4": {
+          "type": "ingredient-card",
+          "settings": {
+            "image": "shopify://shop_images/card-mobile-31614160.png",
+            "title": "Berberine"
+          }
+        },
+        "card_5": {
+          "type": "ingredient-card",
+          "settings": {
+            "image": "shopify://shop_images/card-mobile-31614162.png",
+            "title": "Olive Fruit Extract"
+          }
+        },
+        "card_6": {
+          "type": "ingredient-card",
+          "settings": {
+            "image": "shopify://shop_images/card-mobile-31614161.png",
+            "title": "Japanese Seaweed"
+          }
+        },
+        "card_7": {
+          "type": "ingredient-card",
+          "settings": {
+            "image": "shopify://shop_images/card-desktop-31732135.jpg",
+            "title": "French Cantaloupe"
+          }
+        },
+        "card_8": {
+          "type": "ingredient-card",
+          "settings": {
+            "image": "shopify://shop_images/card-desktop-31732133.jpg",
+            "title": "White Mulberry Leaf"
+          }
+        },
+        "card_9": {
+          "type": "ingredient-card",
+          "settings": {
+            "image": "shopify://shop_images/card-desktop-31732134.jpg",
+            "title": "Coffee Fruit Extract"
+          }
+        }
+      },
+      "block_order": [
+        "card_1",
+        "card_2",
+        "card_3",
+        "card_4",
+        "card_5",
+        "card_6",
+        "card_7",
+        "card_8",
+        "card_9"
+      ],
+      "settings": {
+        "heading": "<p>Made from clinically researched and <strong>sustainably sourced ingredients.<\/strong><\/p>",
+        "subtitle": "Made in the USA with carefully sourced ingredients from around the world. From source to formula, each ingredient is chosen with purpose.",
+        "subtitle_link_text": "About ingredients.",
+        "mobile_label": "Made in USA",
+        "mobile_subtitle": "with globally sourced ingredients",
+        "button_text": "Show All Ingredients",
+        "color_scheme": "scheme-2",
+        "padding-block-start": 96,
+        "padding-block-end": 96
+      }
     }
   },
   "order": [
@@ -674,6 +764,7 @@
     "backed_by",
     "science",
     "impact",
-    "money_back_guarantee"
+    "money_back_guarantee",
+    "ingredients"
   ]
 }
