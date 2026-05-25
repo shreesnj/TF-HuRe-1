@@ -1,0 +1,491 @@
+{%- liquid
+  assign heading = section.settings.heading
+  assign star_color = section.settings.star_color
+  assign heading_bold_color = section.settings.heading_bold_color
+  assign reviews_text = section.settings.reviews_text
+  assign header_rating = section.settings.star_rating | plus: 0
+  assign header_full = header_rating | floor
+  assign header_remainder = header_rating | modulo: 1
+-%}
+
+{%- capture star_full_svg -%}
+<svg class="social-proof-reviews__star" width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M18.96 7.8418L12.6025 7.17041L10 1.33301L7.39746 7.17041L1.04004 7.8418L5.78857 12.1216L4.46289 18.374L10 15.1807L15.5371 18.374L14.2114 12.1216L18.96 7.8418Z" fill="currentColor"/></svg>
+{%- endcapture -%}
+
+{%- capture star_half_svg -%}
+<svg class="social-proof-reviews__star" width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1.33301L7.39746 7.17041L1.04004 7.8418L5.78857 12.1216L4.46289 18.374L10 15.1807V1.33301Z" fill="currentColor"/></svg>
+{%- endcapture -%}
+
+{%- capture star_half_outline_svg -%}
+<svg class="social-proof-reviews__star" width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1.48438L9.43359 2.75391L7.40234 7.32422L2.44141 7.83203L1.03516 7.98828L2.08984 8.92578L5.78125 12.2656L4.74609 17.1484L4.45312 18.5156H4.47266L5.68359 17.8125L10 15.332L14.3164 17.8125L15.5469 18.5156L15.2539 17.1484L14.2188 12.2656L17.9102 8.92578L18.9648 7.98828L17.5586 7.83203L12.5977 7.32422L10.5664 2.75391L10 1.48438ZM10 4.55078L11.6016 8.16406L11.7578 8.47656L12.1094 8.51562L16.0547 8.92578L13.1055 11.582L12.832 11.8164L12.9102 12.168L13.7305 16.0352L10.3125 14.0625L10 13.8867V4.55078Z" fill="currentColor"/></svg>
+{%- endcapture -%}
+
+<div
+  id="SocialProofReviews-{{ section.id }}"
+  class="social-proof-reviews spacing-style color-{{ section.settings.color_scheme }}"
+  style="
+    {% render 'spacing-style', settings: section.settings %}
+    --spr-star-color: {{ star_color }};
+    --spr-heading-bold-color: {{ heading_bold_color }};
+  "
+>
+  <div class="social-proof-reviews__header">
+    {% if heading != blank %}
+      <h2 class="social-proof-reviews__heading">{{ heading }}</h2>
+    {% endif %}
+
+    <div class="social-proof-reviews__rating">
+      <div class="social-proof-reviews__stars social-proof-reviews__stars--header" role="img" aria-label="{{ section.settings.star_rating }} out of 5 stars">
+        {%- for i in (1..header_full) -%}
+          {{ star_full_svg }}
+        {%- endfor -%}
+        {%- if header_remainder != 0 -%}
+          {{ star_half_svg }}
+        {%- endif -%}
+      </div>
+      {% if reviews_text != blank %}
+        <span class="social-proof-reviews__reviews-text">{{ reviews_text }}</span>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="social-proof-reviews__carousel">
+    {% for block in section.blocks %}
+      {%- case block.type -%}
+        {%- when 'image-review' -%}
+          <div class="social-proof-reviews__card social-proof-reviews__card--image" {{ block.shopify_attributes }}>
+            {% if block.settings.image != blank %}
+              {%- liquid
+                assign img = block.settings.image
+              -%}
+              {{
+                img
+                | image_url: width: img.width
+                | image_tag:
+                  sizes: '280px',
+                  widths: '280,560',
+                  loading: 'lazy',
+                  class: 'social-proof-reviews__card-img',
+                  alt: img.alt
+              }}
+            {% endif %}
+            <div class="social-proof-reviews__card-overlay">
+              <div class="social-proof-reviews__card-text">
+                {% if block.settings.quote != blank %}
+                  <span class="social-proof-reviews__card-image-quote">&ldquo;{{ block.settings.quote }}&rdquo;</span>
+                {% endif %}
+                {% if block.settings.author != blank %}
+                  <span class="social-proof-reviews__card-image-author">&ndash; {{ block.settings.author }}</span>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+
+        {%- when 'text-review' -%}
+          {%- liquid
+            assign card_rating = block.settings.star_rating | plus: 0
+            assign card_full = card_rating | floor
+            assign card_remainder = card_rating | modulo: 1
+          -%}
+          <div class="social-proof-reviews__card social-proof-reviews__card--text" {{ block.shopify_attributes }}>
+            <div class="social-proof-reviews__card-container">
+              <div class="social-proof-reviews__stars social-proof-reviews__stars--card" role="img" aria-label="{{ block.settings.star_rating }} out of 5 stars">
+                {%- for i in (1..card_full) -%}
+                  {{ star_full_svg }}
+                {%- endfor -%}
+                {%- if card_remainder != 0 -%}
+                  {{ star_half_outline_svg }}
+                {%- endif -%}
+              </div>
+              {% if block.settings.quote_heading != blank %}
+                <p class="social-proof-reviews__card-quote-heading">{{ block.settings.quote_heading }}</p>
+              {% endif %}
+              {% if block.settings.quote_body != blank %}
+                <p class="social-proof-reviews__card-quote-body">{{ block.settings.quote_body }}</p>
+              {% endif %}
+              {% if block.settings.author != blank %}
+                <p class="social-proof-reviews__card-author-text">&ndash; {{ block.settings.author }}</p>
+              {% endif %}
+            </div>
+          </div>
+      {%- endcase -%}
+    {% endfor %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .social-proof-reviews {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .social-proof-reviews__header {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+    max-width: 1200px;
+    margin-inline: auto;
+    padding-inline: 32px;
+    text-align: center;
+  }
+
+  .social-proof-reviews__heading {
+    font-family: var(--font-body--family);
+    font-weight: 700;
+    font-size: 48px;
+    line-height: 52px;
+    letter-spacing: 0;
+    color: var(--color-foreground);
+    margin: 0;
+    text-transform: none;
+
+    & strong {
+      color: var(--spr-heading-bold-color, #414141);
+    }
+  }
+
+  .social-proof-reviews__rating {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .social-proof-reviews__stars {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0;
+  }
+
+  .social-proof-reviews__star {
+    display: block;
+    flex-shrink: 0;
+  }
+
+  .social-proof-reviews__stars--header {
+    color: var(--spr-star-color, #BC0F0F);
+  }
+
+  .social-proof-reviews__stars--card {
+    color: #414141;
+  }
+
+  .social-proof-reviews__reviews-text {
+    font-family: var(--font-body--family);
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 24px;
+    letter-spacing: -0.5px;
+    color: var(--color-foreground);
+  }
+
+  .social-proof-reviews__carousel {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-inline-start: max(120px, calc((100vw - 1200px) / 2));
+    padding-inline-end: 20px;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .social-proof-reviews__card {
+    flex: 0 0 280px;
+    height: 420px;
+    border-radius: 16px;
+    overflow: hidden;
+    scroll-snap-align: start;
+  }
+
+  .social-proof-reviews__card--image {
+    position: relative;
+  }
+
+  .social-proof-reviews__card-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .social-proof-reviews__card-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+  }
+
+  .social-proof-reviews__card-text {
+    text-align: center;
+    max-width: 215px;
+  }
+
+  .social-proof-reviews__card-image-quote,
+  .social-proof-reviews__card-image-author {
+    display: block;
+    font-family: var(--font-heading--family);
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 40px;
+    letter-spacing: -1px;
+    color: #ffffff;
+    margin: 0;
+  }
+
+  .social-proof-reviews__card-image-author {
+    margin-block-start: 8px;
+  }
+
+  .social-proof-reviews__card--text {
+    background-color: #ffffff;
+  }
+
+  .social-proof-reviews__card-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 12px 20px;
+    height: 100%;
+    text-align: center;
+  }
+
+  .social-proof-reviews__card-quote-heading {
+    font-family: var(--font-heading--family);
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 32px;
+    letter-spacing: -1px;
+    color: #414141;
+    margin: 0;
+  }
+
+  .social-proof-reviews__card-quote-body {
+    font-family: var(--font-heading--family);
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 24px;
+    letter-spacing: -0.5px;
+    color: #767676;
+    margin: 0;
+  }
+
+  .social-proof-reviews__card-author-text {
+    font-family: var(--font-body--family);
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 24px;
+    letter-spacing: -0.5px;
+    color: #767676;
+    margin: 0;
+  }
+
+  @media screen and (max-width: 749px) {
+    .social-proof-reviews {
+      gap: 16px;
+    }
+
+    .social-proof-reviews__heading {
+      font-size: 28px;
+      line-height: 36px;
+    }
+
+    .social-proof-reviews__reviews-text {
+      font-size: 16px;
+      line-height: 20px;
+    }
+
+    .social-proof-reviews__carousel {
+      gap: 16px;
+      padding-inline-start: 12px;
+      padding-inline-end: 12px;
+    }
+
+    .social-proof-reviews__card-image-quote,
+    .social-proof-reviews__card-image-author {
+      font-size: 24px;
+      line-height: 32px;
+    }
+
+    .social-proof-reviews__card--text {
+      background-color: #f5f5f5;
+    }
+
+    .social-proof-reviews__card-quote-heading {
+      font-size: 24px;
+      line-height: 32px;
+    }
+
+    .social-proof-reviews__card-quote-body {
+      font-size: 16px;
+      line-height: 20px;
+    }
+
+    .social-proof-reviews__card-author-text {
+      font-size: 16px;
+      line-height: 20px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Social proof reviews",
+  "tag": "section",
+  "class": "social-proof-reviews-wrapper section-wrapper",
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Join <strong>millions of people</strong> prioritizing their cardiovascular health"
+    },
+    {
+      "type": "select",
+      "id": "star_rating",
+      "label": "Star rating",
+      "options": [
+        { "value": "3", "label": "3 stars" },
+        { "value": "3.5", "label": "3.5 stars" },
+        { "value": "4", "label": "4 stars" },
+        { "value": "4.5", "label": "4.5 stars" },
+        { "value": "5", "label": "5 stars" }
+      ],
+      "default": "4.5"
+    },
+    {
+      "type": "text",
+      "id": "reviews_text",
+      "label": "Reviews text",
+      "default": "100K+ verified reviews"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "heading_bold_color",
+      "label": "Heading bold color",
+      "default": "#414141"
+    },
+    {
+      "type": "color",
+      "id": "star_color",
+      "label": "Star color",
+      "default": "#BC0F0F"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-2"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 80,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 80,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image-review",
+      "name": "Image review",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Quote",
+          "default": "A product that is heart healthy AND tastes amazing."
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author",
+          "default": "Chris D."
+        }
+      ]
+    },
+    {
+      "type": "text-review",
+      "name": "Text review",
+      "settings": [
+        {
+          "type": "select",
+          "id": "star_rating",
+          "label": "Star rating",
+          "options": [
+            { "value": "3", "label": "3 stars" },
+            { "value": "3.5", "label": "3.5 stars" },
+            { "value": "4", "label": "4 stars" },
+            { "value": "4.5", "label": "4.5 stars" },
+            { "value": "5", "label": "5 stars" }
+          ],
+          "default": "4.5"
+        },
+        {
+          "type": "textarea",
+          "id": "quote_heading",
+          "label": "Quote heading",
+          "default": "\"I actually feel better.\""
+        },
+        {
+          "type": "textarea",
+          "id": "quote_body",
+          "label": "Quote body"
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author",
+          "default": "Matt Z."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Social proof reviews",
+      "category": "t:categories.storytelling"
+    }
+  ]
+}
+{% endschema %}
