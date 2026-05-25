@@ -1,0 +1,679 @@
+{%- liquid
+  assign heading = section.settings.heading
+  assign subtitle = section.settings.subtitle
+  assign heading_color = section.settings.heading_color
+  assign show_divider = section.settings.show_divider
+  assign watch_title = section.settings.watch_title
+  assign read_title = section.settings.read_title
+  assign button_text = section.settings.button_text
+  assign button_url = section.settings.button_url
+-%}
+
+<div
+  id="Learn-{{ section.id }}"
+  class="learn spacing-style color-{{ section.settings.color_scheme }}"
+  style="
+    {% render 'spacing-style', settings: section.settings %}
+    --learn-heading-color: {{ heading_color }};
+  "
+>
+  <div class="learn__container">
+    {% if heading != blank %}
+      <div class="learn__heading">{{ heading }}</div>
+    {% endif %}
+
+    {% if show_divider %}
+      <hr class="learn__divider">
+    {% endif %}
+
+    {% if subtitle != blank %}
+      <p class="learn__subtitle">{{ subtitle }}</p>
+    {% endif %}
+
+    <div class="learn__group">
+      {% if watch_title != blank %}
+        <div class="learn__group-title">{{ watch_title }}</div>
+      {% endif %}
+      <div class="learn__carousel learn__carousel--video">
+        {% for block in section.blocks %}
+          {% if block.type == 'video-card' %}
+            <a
+              class="learn__video-card"
+              {% if block.settings.video_url != blank %}href="{{ block.settings.video_url }}"{% endif %}
+              {{ block.shopify_attributes }}
+            >
+              {% if block.settings.image != blank %}
+                <img
+                  class="learn__video-card-img"
+                  src="{{ block.settings.image | image_url: width: 600 }}"
+                  alt="{{ block.settings.title | escape }}"
+                  width="280"
+                  height="380"
+                  loading="lazy"
+                >
+              {% endif %}
+              <img
+                class="learn__mute-icon"
+                src="{{ 'volume-mute-solid.svg' | asset_url }}"
+                alt=""
+                width="24"
+                height="24"
+                loading="lazy"
+              >
+              <div class="learn__video-overlay">
+                <span class="learn__video-title">{{ block.settings.title }}</span>
+                <img
+                  class="learn__play-icon"
+                  src="{{ 'frame-308.svg' | asset_url }}"
+                  alt=""
+                  width="20"
+                  height="20"
+                  loading="lazy"
+                >
+              </div>
+            </a>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="learn__group">
+      {% if read_title != blank %}
+        <div class="learn__group-title">{{ read_title }}</div>
+      {% endif %}
+      <div class="learn__carousel learn__carousel--articles">
+        {% for block in section.blocks %}
+          {% if block.type == 'article-card' %}
+            <a
+              class="learn__article-card"
+              {% if block.settings.article_url != blank %}href="{{ block.settings.article_url }}"{% endif %}
+              {{ block.shopify_attributes }}
+            >
+              {% if block.settings.image != blank %}
+                <img
+                  class="learn__article-card-img"
+                  src="{{ block.settings.image | image_url: width: 600 }}"
+                  alt="{{ block.settings.title | escape }}"
+                  width="280"
+                  height="200"
+                  loading="lazy"
+                >
+              {% endif %}
+              <div class="learn__article-content">
+                <div class="learn__article-meta">
+                  {% if block.settings.category != blank %}
+                    <span class="learn__article-category">{{ block.settings.category }}</span>
+                  {% endif %}
+                  {% if block.settings.read_time != blank %}
+                    <span class="learn__article-time">{{ block.settings.read_time }}</span>
+                  {% endif %}
+                </div>
+                {% if block.settings.title != blank %}
+                  <h3 class="learn__article-title">{{ block.settings.title }}</h3>
+                {% endif %}
+                {% if block.settings.cta_text != blank %}
+                  <div class="learn__article-cta-wrap">
+                    <span class="learn__article-cta">{{ block.settings.cta_text }}</span>
+                  </div>
+                {% endif %}
+              </div>
+            </a>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+
+    {% if button_text != blank %}
+      <div class="learn__cta">
+        <a
+          class="learn__button"
+          {% if button_url != blank %}href="{{ button_url }}"{% endif %}
+        >
+          {{ button_text }}
+        </a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .learn {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .learn__container {
+    max-width: 1200px;
+    width: 100%;
+    margin-inline: auto;
+    padding-inline: 12px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .learn__heading {
+    font-family: var(--font-heading--family);
+    font-weight: 400;
+    font-size: 48px;
+    line-height: 52px;
+    color: var(--learn-heading-color, #767676);
+    margin: 0;
+
+    & p {
+      margin: 0;
+    }
+
+    & strong {
+      font-family: var(--font-body--family);
+      font-weight: 700;
+    }
+  }
+
+  .learn__divider {
+    border: none;
+    border-top: 1px solid #D9D9DB;
+    margin: 0;
+    width: 100%;
+  }
+
+  .learn__subtitle {
+    font-family: var(--font-heading--family);
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 24px;
+    letter-spacing: -0.5px;
+    color: var(--learn-heading-color, #767676);
+    margin: 0;
+  }
+
+  .learn__group {
+    display: flex;
+    flex-direction: column;
+    padding-inline: 8px;
+  }
+
+  .learn__group-title {
+    font-family: var(--font-accent--family);
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 16px;
+    letter-spacing: 0.75px;
+    text-transform: uppercase;
+    color: var(--learn-heading-color, #767676);
+    padding: 16px 0;
+  }
+
+  .learn__carousel {
+    display: flex;
+    gap: 24px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  /* Video cards */
+  .learn__video-card {
+    flex: 0 0 280px;
+    height: 380px;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    scroll-snap-align: start;
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .learn__video-card-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .learn__video-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.2);
+    pointer-events: none;
+    border-radius: 12px;
+  }
+
+  .learn__mute-icon {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 24px;
+    height: 24px;
+    z-index: 2;
+    display: block;
+  }
+
+  .learn__video-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 24px 20px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    z-index: 2;
+  }
+
+  .learn__video-title {
+    font-family: var(--font-body--family);
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 24px;
+    color: #FFFFFF;
+    flex: 1;
+  }
+
+  .learn__play-icon {
+    display: block;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+
+  /* Article cards */
+  .learn__article-card {
+    flex: 0 0 280px;
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .learn__article-card-img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 280 / 200;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+
+  .learn__article-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 16px 4px 8px 4px;
+  }
+
+  .learn__article-meta {
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+    align-items: center;
+  }
+
+  .learn__article-category {
+    font-family: var(--font-heading--family);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    color: #414141;
+  }
+
+  .learn__article-time {
+    font-family: var(--font-heading--family);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    color: #A0A0A0;
+  }
+
+  .learn__article-title {
+    font-family: var(--font-body--family);
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 24px;
+    color: #414141;
+    margin: 0;
+  }
+
+  .learn__article-cta-wrap {
+    padding: 4px 0;
+  }
+
+  .learn__article-cta {
+    font-family: var(--font-heading--family);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    color: #414141;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* Mobile CTA button */
+  .learn__cta {
+    display: none;
+  }
+
+  .learn__button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    border: 2px solid #000000;
+    border-radius: 28px;
+    padding: 12px 20px;
+    font-family: var(--font-accent--family);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 14px;
+    letter-spacing: 0.75px;
+    text-transform: uppercase;
+    color: #000000;
+    text-decoration: none;
+    background: transparent;
+    box-sizing: border-box;
+    transition: background 0.2s, color 0.2s;
+
+    &:hover {
+      background: #000000;
+      color: #FFFFFF;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .learn__container {
+      gap: 16px;
+    }
+
+    .learn__heading {
+      font-size: 32px;
+      line-height: 36px;
+    }
+
+    .learn__subtitle {
+      font-size: 16px;
+      line-height: 20px;
+    }
+
+    .learn__group-title {
+      font-size: 14px;
+      line-height: 14px;
+    }
+
+    .learn__carousel {
+      gap: 8px;
+    }
+
+    .learn__video-title {
+      font-size: 18px;
+      line-height: 20px;
+    }
+
+    .learn__article-category {
+      font-size: 12px;
+      line-height: 14px;
+    }
+
+    .learn__article-time {
+      font-size: 12px;
+      line-height: 14px;
+    }
+
+    .learn__article-title {
+      font-size: 18px;
+      line-height: 20px;
+    }
+
+    .learn__cta {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Learn",
+  "tag": "section",
+  "class": "learn-wrapper section-wrapper",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "<p>Learn more about <strong>Cardiovascular Health</strong></p>"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Visit our knowledge center for expert insights, research, and products inspired by them."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_divider",
+      "label": "Show divider",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "watch_title",
+      "label": "Watch section title",
+      "default": "WATCH"
+    },
+    {
+      "type": "text",
+      "id": "read_title",
+      "label": "Read section title",
+      "default": "POPULAR"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Explore MORE"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#767676"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 80,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 80,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "video-card",
+      "name": "Video card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "How can we get the body to make more nitric oxide?"
+        },
+        {
+          "type": "url",
+          "id": "video_url",
+          "label": "Video link"
+        }
+      ]
+    },
+    {
+      "type": "article-card",
+      "name": "Article card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "category",
+          "label": "Category",
+          "default": "Nutrition"
+        },
+        {
+          "type": "text",
+          "id": "read_time",
+          "label": "Read time",
+          "default": "3 min"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "How can we get the body to make more nitric oxide?"
+        },
+        {
+          "type": "url",
+          "id": "article_url",
+          "label": "Article link"
+        },
+        {
+          "type": "text",
+          "id": "cta_text",
+          "label": "CTA text",
+          "default": "Read more"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "Learn",
+      "category": "t:categories.storytelling",
+      "blocks": [
+        {
+          "type": "video-card",
+          "settings": {
+            "title": "How can we get the body to make more nitric oxide?"
+          }
+        },
+        {
+          "type": "video-card",
+          "settings": {
+            "title": "How can we get the body to make more nitric oxide?"
+          }
+        },
+        {
+          "type": "video-card",
+          "settings": {
+            "title": "How can we get the body to make more nitric oxide?"
+          }
+        },
+        {
+          "type": "video-card",
+          "settings": {
+            "title": "How can we get the body to make more nitric oxide?"
+          }
+        },
+        {
+          "type": "article-card",
+          "settings": {
+            "category": "Nutrition",
+            "read_time": "3 min",
+            "title": "How can we get the body to make more nitric oxide?",
+            "cta_text": "Read more"
+          }
+        },
+        {
+          "type": "article-card",
+          "settings": {
+            "category": "Nutrition",
+            "read_time": "3 min",
+            "title": "Why does cardiovascular health matter?",
+            "cta_text": "Read more"
+          }
+        },
+        {
+          "type": "article-card",
+          "settings": {
+            "category": "Nutrition",
+            "read_time": "3 min",
+            "title": "What does healthy blood pressure mean?",
+            "cta_text": "Read more"
+          }
+        },
+        {
+          "type": "article-card",
+          "settings": {
+            "category": "Nutrition",
+            "read_time": "3 min",
+            "title": "What's inside Humann products?",
+            "cta_text": "Read more"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

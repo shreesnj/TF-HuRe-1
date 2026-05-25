@@ -751,6 +751,100 @@
         "padding-block-start": 96,
         "padding-block-end": 96
       }
+    },
+    "learn": {
+      "type": "learn",
+      "blocks": {
+        "video_1": {
+          "type": "video-card",
+          "settings": {
+            "image": "shopify://shop_images/img-mobile-31614174.png",
+            "title": "How can we get the body to make more nitric oxide?"
+          }
+        },
+        "video_2": {
+          "type": "video-card",
+          "settings": {
+            "image": "shopify://shop_images/img-mobile-31614181.png",
+            "title": "How can we get the body to make more nitric oxide?"
+          }
+        },
+        "video_3": {
+          "type": "video-card",
+          "settings": {
+            "image": "shopify://shop_images/img-mobile-31614188.jpg",
+            "title": "How can we get the body to make more nitric oxide?"
+          }
+        },
+        "video_4": {
+          "type": "video-card",
+          "settings": {
+            "image": "shopify://shop_images/screenshot-2026-04-09-at-12-48-21-1-mobile-31614003.png",
+            "title": "How can we get the body to make more nitric oxide?"
+          }
+        },
+        "article_1": {
+          "type": "article-card",
+          "settings": {
+            "image": "shopify://shop_images/screenshot-2026-04-09-at-12-48-21-1-mobile-header-I4344215368244903.png",
+            "category": "Nutrition",
+            "read_time": "3 min",
+            "title": "How can we get the body to make more nitric oxide?",
+            "cta_text": "Read more"
+          }
+        },
+        "article_2": {
+          "type": "article-card",
+          "settings": {
+            "image": "shopify://shop_images/screenshot-2026-04-09-at-12-48-21-1-mobile-header-I4344215378244903.jpg",
+            "category": "Nutrition",
+            "read_time": "3 min",
+            "title": "Why does cardiovascular health matter?",
+            "cta_text": "Read more"
+          }
+        },
+        "article_3": {
+          "type": "article-card",
+          "settings": {
+            "image": "shopify://shop_images/screenshot-2026-04-09-at-12-48-21-1-mobile-header-I4344215388244903.jpg",
+            "category": "Nutrition",
+            "read_time": "3 min",
+            "title": "What does healthy blood pressure mean?",
+            "cta_text": "Read more"
+          }
+        },
+        "article_4": {
+          "type": "article-card",
+          "settings": {
+            "image": "shopify://shop_images/screenshot-2026-04-09-at-12-48-21-1-desktop-I317321798244903.jpg",
+            "category": "Nutrition",
+            "read_time": "3 min",
+            "title": "What's inside Humann products?",
+            "cta_text": "Read more"
+          }
+        }
+      },
+      "block_order": [
+        "video_1",
+        "video_2",
+        "video_3",
+        "video_4",
+        "article_1",
+        "article_2",
+        "article_3",
+        "article_4"
+      ],
+      "settings": {
+        "heading": "<p>Learn more about <strong>Cardiovascular Health<\/strong><\/p>",
+        "subtitle": "Visit our knowledge center for expert insights, research, and products inspired by them.",
+        "show_divider": true,
+        "watch_title": "WATCH",
+        "read_title": "POPULAR",
+        "button_text": "Explore MORE",
+        "heading_color": "#767676",
+        "padding-block-start": 80,
+        "padding-block-end": 80
+      }
     }
   },
   "order": [
@@ -765,6 +859,7 @@
     "science",
     "impact",
     "money_back_guarantee",
-    "ingredients"
+    "ingredients",
+    "learn"
   ]
 }
