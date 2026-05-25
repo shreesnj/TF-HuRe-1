@@ -63,6 +63,15 @@
   {% endif %}
   {{- block.shopify_attributes -}}
 >
+  {% if display_style == 'text' and custom_utility_text != blank %}
+    <a
+      href="{{ custom_utility_url | default: '#' }}"
+      class="header-actions__action header-actions__text-style header-actions__utility-link"
+    >
+      {{ custom_utility_text }}
+    </a>
+  {% endif %}
+
   {% if shop.customer_accounts_enabled %}
     {% liquid
       assign account_actions_style = ''
@@ -709,5 +718,27 @@
     .header__column--right .header-actions--text {
       margin-inline-start: 0;
     }
+  }
+
+  /* Figma override: letter-spacing on text-style actions */
+  @media screen and (min-width: 750px) {
+    .header-actions__text-style {
+      letter-spacing: 0.75px;
+    }
+  }
+
+  /* Custom utility link: hide on mobile and drawer mode */
+  .header-actions__utility-link {
+    text-decoration: none;
+  }
+
+  @media screen and (max-width: 749px) {
+    .header-actions__utility-link {
+      display: none;
+    }
+  }
+
+  #header-component[data-menu-style='drawer'] .header-actions__utility-link {
+    display: none;
   }
 {% endstylesheet %}

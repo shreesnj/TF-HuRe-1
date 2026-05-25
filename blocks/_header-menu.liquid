@@ -679,6 +679,22 @@
     /* preserves the inherited grid layout when this submenu wrapper is used */
     display: contents;
   }
+
+  /* Figma override: 28px gap between top-level menu items on desktop */
+  @media screen and (min-width: 750px) {
+    .menu-list {
+      --menu-horizontal-gap: 28px;
+    }
+
+    .menu-list__link-title {
+      padding-inline: calc(var(--menu-horizontal-gap) / 2);
+    }
+  }
+
+  /* Figma override: letter-spacing on menu link titles */
+  .menu-list__link-title {
+    letter-spacing: -0.5px;
+  }
 {% endstylesheet %}
 
 {% schema %}

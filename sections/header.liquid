@@ -65,7 +65,7 @@
   # theme-check-enable UniqueStaticBlockId
 
   capture actions
-    render 'header-actions', customer_account_menu: section.settings.customer_account_menu, display_style: section.settings.actions_display_style, section: section
+    render 'header-actions', customer_account_menu: section.settings.customer_account_menu, display_style: section.settings.actions_display_style, section: section, custom_utility_text: section.settings.custom_utility_text, custom_utility_url: section.settings.custom_utility_url
   endcapture
 
   if shop.customer_accounts_enabled
@@ -1111,6 +1111,42 @@
     font-family: var(--menu-localization-font);
     font-size: var(--menu-localization-font-size);
   }
+
+  /* Figma override: 16px vertical header padding */
+  .header:not(.header--compact) {
+    --header-padding: 1rem;
+  }
+
+  /* Figma override: 36px gap between logo and menu, 24px horizontal gutters on desktop */
+  @media screen and (min-width: 750px) {
+    .header__column--left {
+      gap: 36px;
+    }
+
+    .header__columns {
+      padding-inline: 24px;
+    }
+  }
+
+  /* Figma override: 20px mobile padding and icon color */
+  @media screen and (max-width: 749px) {
+    .header__columns {
+      padding-inline: 20px;
+    }
+
+    .header-actions__action svg {
+      color: #767676;
+    }
+  }
+
+  /* Drawer mode: match mobile styles */
+  #header-component[data-menu-style='drawer'] .header__columns {
+    padding-inline: 20px;
+  }
+
+  #header-component[data-menu-style='drawer'] .header-actions__action svg {
+    color: #767676;
+  }
 {% endstylesheet %}
 
 {% unless request.design_mode %}
@@ -1540,6 +1576,19 @@
         }
       ],
       "default": "none",
+      "visible_if": "{{ section.settings.actions_display_style == 'text' }}"
+    },
+    {
+      "type": "text",
+      "id": "custom_utility_text",
+      "label": "Utility link text",
+      "default": "PROFESSIONAL",
+      "visible_if": "{{ section.settings.actions_display_style == 'text' }}"
+    },
+    {
+      "type": "url",
+      "id": "custom_utility_url",
+      "label": "Utility link URL",
       "visible_if": "{{ section.settings.actions_display_style == 'text' }}"
     },
     {
