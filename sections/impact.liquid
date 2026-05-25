@@ -1,0 +1,439 @@
+{%- liquid
+  assign heading = section.settings.heading
+  assign stat_text = section.settings.stat_text
+  assign background_image = section.settings.background_image
+  assign background_image_mobile = section.settings.background_image_mobile
+  assign dot_color = section.settings.dot_color
+-%}
+
+<div
+  id="Impact-{{ section.id }}"
+  class="impact spacing-style color-{{ section.settings.color_scheme }}"
+  style="
+    {% render 'spacing-style', settings: section.settings %}
+    --impact-dot-color: {{ dot_color }};
+  "
+>
+  {% if background_image != blank or background_image_mobile != blank %}
+    <picture class="impact__bg-picture">
+      {% if background_image != blank %}
+        {%- liquid
+          assign desktop_sizes = '100vw'
+          assign desktop_img_url = background_image | image_url: width: background_image.width
+        -%}
+        <source
+          media="(min-width: 750px)"
+          srcset="{{ desktop_img_url }}"
+        >
+      {% endif %}
+      {%- liquid
+        assign mobile_img = background_image_mobile | default: background_image
+        assign mobile_img_url = mobile_img | image_url: width: mobile_img.width
+      -%}
+      <img
+        src="{{ mobile_img_url }}"
+        alt="{{ mobile_img.alt | escape }}"
+        loading="lazy"
+        class="impact__bg-img"
+        width="{{ mobile_img.width }}"
+        height="{{ mobile_img.height }}"
+      >
+    </picture>
+  {% endif %}
+
+  <div class="impact__overlay"></div>
+
+  <div class="impact__content">
+    <div class="impact__title">
+      {% if heading != blank %}
+        <div class="impact__heading">{{ heading }}</div>
+      {% endif %}
+      {% if stat_text != blank %}
+        <div class="impact__stat-wrapper">
+          <div class="impact__stat">
+            <span class="impact__dot"></span>
+            <span class="impact__stat-text">{{ stat_text }}</span>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+
+    {% if section.blocks.size > 0 %}
+      <div class="impact__cards">
+        {% for block in section.blocks %}
+          <div class="impact__card" {{ block.shopify_attributes }}>
+            <div class="impact__card-top">
+              {% if block.settings.days_label != blank %}
+                <span class="impact__card-label">{{ block.settings.days_label }}</span>
+              {% endif %}
+              {% if block.settings.description != blank %}
+                <div class="impact__card-description">{{ block.settings.description }}</div>
+              {% endif %}
+            </div>
+            <div class="impact__card-benefits">
+              {% if block.settings.benefit_1 != blank %}
+                <span class="impact__card-benefit">{{ block.settings.benefit_1 }}</span>
+              {% endif %}
+              {% if block.settings.benefit_2 != blank %}
+                <span class="impact__card-benefit">{{ block.settings.benefit_2 }}</span>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .impact {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .impact__bg-picture {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .impact__bg-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .impact__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.2);
+    z-index: 1;
+  }
+
+  .impact__content {
+    position: relative;
+    z-index: 2;
+    max-width: 1200px;
+    margin-inline: auto;
+    width: 100%;
+    padding-inline: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .impact__title {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
+    padding-inline: 8px;
+  }
+
+  .impact__heading {
+    font-family: var(--font-heading--family);
+    font-weight: 400;
+    font-size: 48px;
+    line-height: 60px;
+    letter-spacing: -1px;
+    color: #FFFFFF;
+
+    & p {
+      margin: 0;
+    }
+
+    & strong {
+      font-weight: 700;
+    }
+  }
+
+  .impact__stat-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .impact__stat {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .impact__dot {
+    width: 12px;
+    height: 12px;
+    min-width: 12px;
+    border-radius: 50%;
+    background-color: var(--impact-dot-color, #BC0F0F);
+  }
+
+  .impact__stat-text {
+    font-family: var(--font-body--family);
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+    color: #FFFFFF;
+  }
+
+  .impact__cards {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+    padding-block: 16px;
+  }
+
+  .impact__card {
+    flex: 1 1 0;
+    min-height: 488px;
+    border-radius: 16px;
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(36px);
+    -webkit-backdrop-filter: blur(36px);
+  }
+
+  .impact__card-top {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+  }
+
+  .impact__card-label {
+    font-family: var(--font-accent--family);
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 20px;
+    letter-spacing: 0.75px;
+    text-transform: uppercase;
+    color: #FFFFFF;
+  }
+
+  .impact__card-description {
+    font-family: var(--font-heading--family);
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 28px;
+    letter-spacing: -1px;
+    color: #FFFFFF;
+
+    & p {
+      margin: 0;
+    }
+
+    & strong {
+      font-weight: 700;
+    }
+  }
+
+  .impact__card-benefits {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .impact__card-benefit {
+    font-family: var(--font-body--family);
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 24px;
+    letter-spacing: -0.5px;
+    color: #FFFFFF;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    padding-top: 8px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .impact__title {
+      gap: 16px;
+    }
+
+    .impact__heading {
+      line-height: 48px;
+    }
+
+    .impact__stat-text {
+      font-size: 18px;
+      line-height: 20px;
+    }
+
+    .impact__cards {
+      gap: 12px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      flex-wrap: nowrap;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+
+    .impact__card {
+      flex: 0 0 280px;
+      min-height: 360px;
+    }
+
+    .impact__card-label {
+      font-size: 16px;
+      line-height: 18px;
+    }
+
+    .impact__card-description {
+      font-size: 20px;
+      line-height: 24px;
+    }
+
+    .impact__card-benefit {
+      font-size: 16px;
+      line-height: 20px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Impact",
+  "tag": "section",
+  "class": "impact-wrapper section-wrapper",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "<p>One routine.<br><strong>Big impact.</strong></p>"
+    },
+    {
+      "type": "text",
+      "id": "stat_text",
+      "label": "Stat text",
+      "default": "35K daily active users"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image_mobile",
+      "label": "Mobile background image"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "dot_color",
+      "label": "Dot color",
+      "default": "#BC0F0F"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 80,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 80,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "impact-card",
+      "name": "Impact card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "days_label",
+          "label": "Days label",
+          "default": "30 days"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description"
+        },
+        {
+          "type": "text",
+          "id": "benefit_1",
+          "label": "Benefit 1"
+        },
+        {
+          "type": "text",
+          "id": "benefit_2",
+          "label": "Benefit 2"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Impact",
+      "category": "t:categories.storytelling",
+      "blocks": [
+        {
+          "type": "impact-card",
+          "settings": {
+            "days_label": "30 days",
+            "description": "<p>You start building consistency as your routine becomes a part of your <strong>daily cardiovascular support.</strong></p>",
+            "benefit_1": "Supports nitric oxide levels",
+            "benefit_2": "Promotes healthy blood flow"
+          }
+        },
+        {
+          "type": "impact-card",
+          "settings": {
+            "days_label": "60 days",
+            "description": "<p>You feel the routine take hold as you continue <strong>supporting nitric oxide,</strong> blood flow, and overall cardiovascular health.</p>",
+            "benefit_1": "Enhanced daily energy",
+            "benefit_2": "Supports cardiovascular vitality"
+          }
+        },
+        {
+          "type": "impact-card",
+          "settings": {
+            "days_label": "90 days",
+            "description": "<p>Support becomes part of <strong>your daily rhythm</strong>, with habits and benefits working together over time</p>",
+            "benefit_1": "Optimized blood pressure",
+            "benefit_2": "Long-term cardiovascular support"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
