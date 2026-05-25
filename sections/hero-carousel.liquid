@@ -1,0 +1,576 @@
+{% liquid
+  assign slide_count = section.blocks | size
+%}
+
+<hero-carousel
+  id="Section-{{ section.id }}"
+  class="hero-carousel-wrapper section-wrapper spacing-style"
+  style="{% render 'spacing-style', settings: section.settings %}"
+  {% if section.settings.autoplay %}
+    data-autoplay="true"
+    data-speed="{{ section.settings.autoplay_speed }}"
+  {% endif %}
+>
+  <div class="hero-carousel" id="Hero-{{ section.id }}">
+    <div class="hero-carousel__viewport">
+      <div class="hero-carousel__track" ref="track">
+        {% for block in section.blocks %}
+          <div
+            class="hero-carousel__slide"
+            ref="slides[]"
+            role="group"
+            aria-roledescription="slide"
+            aria-label="Slide {{ forloop.index }} of {{ slide_count }}"
+            aria-hidden="{% if forloop.first %}false{% else %}true{% endif %}"
+            {{ block.shopify_attributes }}
+          >
+            <div class="hero-carousel__text-col">
+              {% if block.settings.heading != blank %}
+                <div class="hero-carousel__text-group">
+                  <h2 class="hero-carousel__heading">{{ block.settings.heading }}</h2>
+
+                  {% if section.settings.show_divider %}
+                    <hr class="hero-carousel__divider">
+                  {% endif %}
+
+                  {% if block.settings.subtitle != blank %}
+                    <p class="hero-carousel__subtitle">{{ block.settings.subtitle }}</p>
+                  {% endif %}
+                </div>
+              {% endif %}
+
+              {% if block.settings.button_text != blank %}
+                <div class="hero-carousel__btn-wrap">
+                  <a
+                    {% if block.settings.button_link != blank %}
+                      href="{{ block.settings.button_link }}"
+                    {% endif %}
+                    class="hero-carousel__button"
+                  >
+                    {{ block.settings.button_text }}
+                  </a>
+                </div>
+              {% endif %}
+            </div>
+
+            {% if block.settings.product_image != blank %}
+              <div class="hero-carousel__image-col">
+                {% liquid
+                  assign img = block.settings.product_image
+                  assign sizes_val = '(min-width: 750px) 50vw, 100vw'
+                %}
+                {{
+                  img
+                  | image_url: width: img.width
+                  | image_tag:
+                    sizes: sizes_val,
+                    widths: '375,550,750,1100,1500',
+                    loading: 'eager',
+                    fetchpriority: 'high',
+                    class: 'hero-carousel__product-image',
+                    alt: img.alt
+                }}
+              </div>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="hero-carousel__footer">
+      {% assign first_block = section.blocks | first %}
+      {% if first_block.settings.badge_image != blank %}
+        <div class="hero-carousel__badge">
+          {% liquid
+            assign badge = first_block.settings.badge_image
+            assign badge_sizes = '(min-width: 750px) 323px, 226px'
+          %}
+          {{
+            badge
+            | image_url: width: badge.width
+            | image_tag:
+              sizes: badge_sizes,
+              widths: '226,323,452,646',
+              loading: 'eager',
+              class: 'hero-carousel__badge-image',
+              alt: badge.alt
+          }}
+        </div>
+      {% endif %}
+
+      <div class="hero-carousel__nav">
+        <button
+          type="button"
+          class="hero-carousel__nav-btn hero-carousel__nav-btn--prev"
+          ref="prevBtn"
+          on:click="/prev"
+          aria-label="Previous slide"
+        >
+          <svg
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+            focusable="false"
+            aria-hidden="true"
+            class="hero-carousel__nav-icon hero-carousel__nav-icon--prev"
+          >
+            {% render 'icon', icon: 'arrow' %}
+          </svg>
+        </button>
+        <button
+          type="button"
+          class="hero-carousel__nav-btn hero-carousel__nav-btn--next"
+          ref="nextBtn"
+          on:click="/next"
+          aria-label="Next slide"
+        >
+          <svg
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+            focusable="false"
+            aria-hidden="true"
+            class="hero-carousel__nav-icon"
+          >
+            {% render 'icon', icon: 'arrow' %}
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</hero-carousel>
+
+<script src="{{ 'hero-carousel.js' | asset_url }}" type="module"></script>
+
+{% style %}
+  #Section-{{ section.id }} .hero-carousel {
+    --hero-gradient-1: {{ section.settings.gradient_color_1 }};
+    --hero-gradient-2: {{ section.settings.gradient_color_2 }};
+    --hero-gradient-angle: {{ section.settings.gradient_angle }}deg;
+    --hero-corner-radius: {{ section.settings.corner_radius }}px;
+    --hero-heading-color: {{ section.settings.heading_color }};
+    --hero-subtitle-color: {{ section.settings.subtitle_color }};
+    --hero-nav-bg: {{ section.settings.nav_bg_color }};
+    --hero-nav-icon-color: {{ section.settings.nav_icon_color }};
+  }
+{% endstyle %}
+
+{% stylesheet %}
+  .hero-carousel {
+    background: linear-gradient(var(--hero-gradient-angle), var(--hero-gradient-1), var(--hero-gradient-2));
+    border-radius: var(--hero-corner-radius);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 32px 12px 20px;
+
+    @media screen and (min-width: 750px) {
+      padding: 32px 48px;
+      gap: 24px;
+    }
+  }
+
+  .hero-carousel__viewport {
+    overflow: hidden;
+  }
+
+  .hero-carousel__track {
+    display: flex;
+    transition: transform 0.5s ease;
+    will-change: transform;
+  }
+
+  .hero-carousel__slide {
+    flex: 0 0 100%;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    min-height: 400px;
+    align-items: center;
+
+    @media screen and (min-width: 750px) {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0;
+      min-height: auto;
+    }
+  }
+
+  .hero-carousel__text-col {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+    text-align: center;
+
+    @media screen and (min-width: 750px) {
+      width: 50%;
+      text-align: start;
+    }
+  }
+
+  .hero-carousel__text-group {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    justify-content: center;
+
+    @media screen and (min-width: 750px) {
+      justify-content: flex-start;
+    }
+  }
+
+  .hero-carousel__heading {
+    font-family: var(--font-heading--family);
+    font-weight: 700;
+    font-size: 60px;
+    line-height: 48px;
+    color: var(--hero-heading-color);
+    margin: 0;
+
+    @media screen and (min-width: 750px) {
+      line-height: 60px;
+    }
+  }
+
+  .hero-carousel__divider {
+    border: none;
+    border-bottom: 1px solid var(--hero-heading-color);
+    opacity: 0.3;
+    margin: 0;
+    width: 100%;
+
+    @media screen and (min-width: 750px) {
+      display: block;
+    }
+  }
+
+  .hero-carousel__subtitle {
+    font-family: var(--font-subheading--family, var(--font-body--family));
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: -0.5px;
+    color: var(--hero-subtitle-color);
+    margin: 0;
+
+    @media screen and (min-width: 750px) {
+      font-size: 18px;
+      line-height: 24px;
+    }
+  }
+
+  .hero-carousel__btn-wrap {
+    display: flex;
+    justify-content: center;
+
+    @media screen and (min-width: 750px) {
+      justify-content: flex-start;
+    }
+  }
+
+  .hero-carousel__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000000;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 28px;
+    padding: 12px 20px;
+    font-family: var(--font-body--family);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 14px;
+    letter-spacing: 0.75px;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+
+    @media screen and (min-width: 750px) {
+      padding: 16px 28px;
+      font-size: 16px;
+      line-height: 16px;
+    }
+
+    &:hover {
+      opacity: 0.85;
+    }
+  }
+
+  .hero-carousel__image-col {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+
+    @media screen and (min-width: 750px) {
+      position: relative;
+      inset: auto;
+      width: 50%;
+      z-index: auto;
+    }
+  }
+
+  .hero-carousel__product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+
+    @media screen and (min-width: 750px) {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
+  }
+
+  .hero-carousel__footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .hero-carousel__badge {
+    flex-shrink: 0;
+  }
+
+  .hero-carousel__badge-image {
+    display: block;
+    height: 28px;
+    width: auto;
+
+    @media screen and (min-width: 750px) {
+      height: 40px;
+    }
+  }
+
+  .hero-carousel__nav {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    margin-inline-start: auto;
+  }
+
+  .hero-carousel__nav-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--hero-nav-bg);
+    border: none;
+    border-radius: 28px;
+    cursor: pointer;
+    padding: 6px 12px;
+    width: 44px;
+    height: 32px;
+    transition: opacity 0.2s ease;
+
+    @media screen and (min-width: 750px) {
+      padding: 12px 20px;
+      width: 64px;
+      height: 48px;
+    }
+
+    &:hover {
+      opacity: 0.7;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--hero-nav-icon-color);
+      outline-offset: 2px;
+    }
+  }
+
+  .hero-carousel__nav-icon {
+    width: 20px;
+    height: 20px;
+    color: var(--hero-nav-icon-color);
+
+    @media screen and (min-width: 750px) {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  .hero-carousel__nav-icon--prev {
+    transform: rotate(180deg);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Hero carousel",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "color",
+      "id": "gradient_color_1",
+      "label": "Gradient start",
+      "default": "#F0F0F0"
+    },
+    {
+      "type": "color",
+      "id": "gradient_color_2",
+      "label": "Gradient end",
+      "default": "#E3E3E3"
+    },
+    {
+      "type": "number",
+      "id": "gradient_angle",
+      "label": "Gradient angle",
+      "default": 170
+    },
+    {
+      "type": "number",
+      "id": "corner_radius",
+      "label": "Corner radius",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#BC0F0F"
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Subtitle color",
+      "default": "#BC0F0F"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_divider",
+      "label": "Show divider",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Navigation"
+    },
+    {
+      "type": "color",
+      "id": "nav_bg_color",
+      "label": "Arrow background",
+      "default": "#F5F5F5"
+    },
+    {
+      "type": "color",
+      "id": "nav_icon_color",
+      "label": "Arrow icon color",
+      "default": "#414141"
+    },
+    {
+      "type": "header",
+      "content": "Autoplay"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Enable autoplay",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "label": "Autoplay speed",
+      "min": 3,
+      "max": 10,
+      "step": 1,
+      "default": 5,
+      "unit": "s"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 0,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "heading",
+          "label": "Heading",
+          "default": "SuperBeets®, The Cardiovascular Health Original"
+        },
+        {
+          "type": "textarea",
+          "id": "subtitle",
+          "label": "Subtitle",
+          "default": "Combines category-leading trust with clinically researched cardiovascular support."
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button text",
+          "default": "Shop SuperBeets"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        },
+        {
+          "type": "image_picker",
+          "id": "product_image",
+          "label": "Product image"
+        },
+        {
+          "type": "image_picker",
+          "id": "badge_image",
+          "label": "Badge image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero carousel",
+      "blocks": [
+        {
+          "type": "slide"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
