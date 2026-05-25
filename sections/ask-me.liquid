@@ -1,0 +1,419 @@
+{% liquid
+  assign heading = section.settings.heading
+  assign placeholder = section.settings.placeholder_text
+  assign button_text = section.settings.button_text
+  assign search_url = section.settings.search_url | default: '/search'
+  assign expert_image = section.settings.expert_image
+  assign expert_title = section.settings.expert_title
+  assign expert_description = section.settings.expert_description
+%}
+
+<div
+  id="AskMe-{{ section.id }}"
+  class="ask-me color-{{ section.settings.color_scheme }}"
+  style="{% render 'spacing-style', settings: section.settings %}"
+>
+  <div class="ask-me__card">
+    <div class="ask-me__search-area">
+      {% if heading != blank %}
+        <h2 class="ask-me__heading">{{ heading | escape }}</h2>
+      {% endif %}
+
+      <form class="ask-me__field" action="{{ search_url }}" method="get">
+        <div class="ask-me__field-content">
+          <img
+            class="ask-me__field-icon"
+            src="{{ 'book-open-solid-2.svg' | asset_url }}"
+            alt=""
+            width="28"
+            height="28"
+            loading="lazy"
+          >
+          <input
+            class="ask-me__input"
+            type="text"
+            name="q"
+            placeholder="{{ placeholder | escape }}"
+            autocomplete="off"
+          >
+        </div>
+        <button class="ask-me__submit-btn" type="submit">
+          {{ button_text | escape }}
+        </button>
+      </form>
+    </div>
+
+    <div class="ask-me__expert-area">
+      {% if expert_image != blank %}
+        <div class="ask-me__expert-avatar">
+          <img
+            class="ask-me__expert-avatar-img"
+            src="{{ expert_image | image_url: width: 144 }}"
+            alt="{{ expert_image.alt | escape }}"
+            width="72"
+            height="72"
+            loading="lazy"
+          >
+          <span class="ask-me__expert-badge" aria-hidden="true">
+            <svg width="8" height="8" viewBox="0 0 8 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 3L3 5L7 1" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </div>
+      {% endif %}
+
+      <div class="ask-me__expert-text">
+        {% if expert_title != blank %}
+          <p class="ask-me__expert-title">{{ expert_title | escape }}</p>
+        {% endif %}
+        {% if expert_description != blank %}
+          <p class="ask-me__expert-description">{{ expert_description | escape }}</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+.ask-me {
+  padding-inline: 16px;
+  padding-block-start: var(--padding-block-start, 8px);
+  padding-block-end: var(--padding-block-end, 16px);
+
+  @media screen and (max-width: 749px) {
+    padding-inline: 12px;
+  }
+}
+
+.ask-me__card {
+  display: flex;
+  flex-direction: row;
+  border-radius: 16px;
+  overflow: hidden;
+  background-color: var(--color-background);
+
+  @media screen and (max-width: 749px) {
+    flex-direction: column;
+  }
+}
+
+.ask-me__search-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  padding: 28px 40px 32px 40px;
+
+  @media screen and (max-width: 749px) {
+    padding: 24px 20px;
+  }
+}
+
+.ask-me__heading {
+  margin: 0;
+  font-family: var(--font-heading--family);
+  font-weight: 700;
+  font-style: var(--font-heading--style);
+  font-size: 32px;
+  line-height: 40px;
+  letter-spacing: 0;
+  color: var(--color-foreground);
+
+  @media screen and (max-width: 749px) {
+    font-size: 24px;
+    line-height: 32px;
+    text-align: center;
+  }
+}
+
+.ask-me__field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px;
+  border-radius: 32px;
+  background: #FFFFFF;
+  border: 2px solid #F5F5F5;
+
+  @media screen and (max-width: 749px) {
+    padding: 12px 16px;
+    border-radius: 24px;
+  }
+}
+
+.ask-me__field-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 8px;
+
+  @media screen and (max-width: 749px) {
+    padding: 0;
+    gap: 8px;
+  }
+}
+
+.ask-me__field-icon {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+
+  @media screen and (max-width: 749px) {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.ask-me__input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: var(--font-subheading--family);
+  font-weight: 500;
+  font-style: var(--font-subheading--style);
+  font-size: 16px;
+  line-height: 20px;
+  color: #414141;
+  padding: 0;
+
+  @media screen and (max-width: 749px) {
+    font-size: 14px;
+    line-height: 18px;
+  }
+}
+
+.ask-me__input::placeholder {
+  color: #414141;
+
+  @media screen and (max-width: 749px) {
+    color: #767676;
+  }
+}
+
+.ask-me__submit-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 28px;
+  background: #000000;
+  color: #FFFFFF;
+  font-family: var(--font-body--family);
+  font-weight: 400;
+  font-style: var(--font-body--style);
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: 0.75px;
+  text-transform: uppercase;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.85;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-foreground);
+    outline-offset: 2px;
+  }
+
+  @media screen and (max-width: 749px) {
+    display: none;
+  }
+}
+
+.ask-me__expert-area {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+  width: 445px;
+  flex-shrink: 0;
+  padding: 0 32px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-radius: 0 16px 16px 0;
+
+  @media screen and (max-width: 749px) {
+    width: auto;
+    flex-shrink: unset;
+    justify-content: center;
+    padding: 16px;
+    border-radius: 0 0 16px 16px;
+  }
+}
+
+.ask-me__expert-avatar {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.ask-me__expert-avatar-img {
+  display: block;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+
+  @media screen and (max-width: 749px) {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+.ask-me__expert-badge {
+  display: none;
+
+  @media screen and (max-width: 749px) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    bottom: 0;
+    right: -4px;
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    background: #414141;
+  }
+}
+
+.ask-me__expert-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  @media screen and (max-width: 749px) {
+    gap: 2px;
+  }
+}
+
+.ask-me__expert-title {
+  margin: 0;
+  font-family: var(--font-heading--family);
+  font-weight: 700;
+  font-style: var(--font-heading--style);
+  font-size: 16px;
+  line-height: 20px;
+  color: var(--color-foreground);
+
+  @media screen and (max-width: 749px) {
+    font-size: 14px;
+    line-height: 18px;
+  }
+}
+
+.ask-me__expert-description {
+  margin: 0;
+  font-family: var(--font-subheading--family);
+  font-weight: 500;
+  font-style: var(--font-subheading--style);
+  font-size: 16px;
+  line-height: 20px;
+  color: var(--color-foreground);
+
+  @media screen and (max-width: 749px) {
+    font-size: 14px;
+    line-height: 18px;
+  }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Ask Me",
+  "tag": "section",
+  "class": "ask-me-wrapper section-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Ask me anything about cardiovascular health"
+    },
+    {
+      "type": "text",
+      "id": "placeholder_text",
+      "label": "Placeholder text",
+      "default": "How does blood flow support energy?"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "GO"
+    },
+    {
+      "type": "url",
+      "id": "search_url",
+      "label": "Search URL"
+    },
+    {
+      "type": "header",
+      "content": "Expert"
+    },
+    {
+      "type": "image_picker",
+      "id": "expert_image",
+      "label": "Expert image"
+    },
+    {
+      "type": "text",
+      "id": "expert_title",
+      "label": "Expert title",
+      "default": "Approved by experts"
+    },
+    {
+      "type": "textarea",
+      "id": "expert_description",
+      "label": "Expert description",
+      "default": "Get answers backed by research from Humann's Chief Cardiologist."
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-3"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 8,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 16,
+      "unit": "px"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Ask Me"
+    }
+  ]
+}
+{% endschema %}
