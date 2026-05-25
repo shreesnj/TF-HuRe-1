@@ -7,19 +7,12 @@
  * made to this file may be overwritten.
  * ------------------------------------------------------------
  */
- {
+{
   "type": "footer",
   "name": "t:names.footer",
   "sections": {
     "footer": {
       "type": "footer",
-      "settings": {
-        "section_width": "page-width",
-        "gap": 48,
-        "color_scheme": "scheme-8",
-        "padding-block-start": 40,
-        "padding-block-end": 60
-      },
       "blocks": {
         "left_group": {
           "type": "group",
@@ -46,9 +39,9 @@
             "social_icons": {
               "type": "social-links",
               "settings": {
+                "facebook_url": "https://www.facebook.com/humann",
                 "instagram_url": "https://www.instagram.com/humann",
-                "twitter_url": "https://x.com/humann",
-                "facebook_url": "https://www.facebook.com/humann"
+                "twitter_url": "https://x.com/humann"
               }
             },
             "menu_shop_product": {
@@ -179,11 +172,11 @@
                   "settings": {
                     "width": "fill",
                     "border_style": "all",
-                    "display_type": "arrow",
-                    "integrated_button": true,
                     "border_width": 1,
                     "border_radius": 0,
                     "style_class": "button-unstyled",
+                    "display_type": "arrow",
+                    "integrated_button": true,
                     "padding-block-start": 0,
                     "padding-block-end": 0,
                     "padding-inline-start": 0,
@@ -355,7 +348,14 @@
       "block_order": [
         "left_group",
         "right_group"
-      ]
+      ],
+      "settings": {
+        "section_width": "page-width",
+        "gap": 48,
+        "color_scheme": "scheme-8",
+        "padding-block-start": 40,
+        "padding-block-end": 60
+      }
     },
     "utilities": {
       "type": "footer-utilities",
@@ -366,9 +366,7 @@
         "color_scheme": "scheme-8",
         "padding-block-start": 0,
         "padding-block-end": 0
-      },
-      "blocks": {},
-      "block_order": []
+      }
     }
   },
   "order": [
