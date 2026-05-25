@@ -403,6 +403,7 @@
         "heading": "Join <strong>millions of people<\/strong> prioritizing their cardiovascular health",
         "star_rating": "4.5",
         "reviews_text": "100K+ verified reviews",
+        "heading_bold_color": "#767676",
         "color_scheme": "scheme-2",
         "padding-block-start": 80,
         "padding-block-end": 80
