@@ -1,0 +1,588 @@
+{%- liquid
+  assign heading = section.settings.heading
+  assign subtitle = section.settings.subtitle
+  assign bold_subtitle = section.settings.bold_subtitle
+  assign show_divider = section.settings.show_divider
+-%}
+
+<div
+  id="ThreeKeys-{{ section.id }}"
+  class="three-keys spacing-style color-{{ section.settings.color_scheme }}"
+  style="{% render 'spacing-style', settings: section.settings %}"
+>
+  <div class="three-keys__content">
+    <div class="three-keys__header">
+      {% if heading != blank %}
+        <div class="three-keys__heading">{{ heading }}</div>
+      {% endif %}
+      {% if subtitle != blank %}
+        <p class="three-keys__subtitle">{{ subtitle }}</p>
+      {% endif %}
+      {% if show_divider %}
+        <hr class="three-keys__divider">
+      {% endif %}
+      {% if bold_subtitle != blank %}
+        <p class="three-keys__bold-subtitle">{{ bold_subtitle }}</p>
+      {% endif %}
+    </div>
+
+    <three-keys-cards class="three-keys__cards">
+      {% for block in section.blocks %}
+        {%- liquid
+          if forloop.first
+            assign is_expanded = 'true'
+          else
+            assign is_expanded = 'false'
+          endif
+        -%}
+        <div
+          class="three-keys__card"
+          data-expanded="{{ is_expanded }}"
+          data-index="{{ forloop.index0 }}"
+          style="--card-bg: {{ block.settings.card_color }};"
+          {{ block.shopify_attributes }}
+        >
+          <div class="three-keys__card-header">
+            <span class="three-keys__card-number">{{ block.settings.number }}</span>
+            <span class="three-keys__card-title">{{ block.settings.title }}</span>
+          </div>
+          <div class="three-keys__card-body">
+            {% if block.settings.intro_text != blank %}
+              <div class="three-keys__card-intro">
+                <p class="three-keys__card-intro-text">{{ block.settings.intro_text }}</p>
+              </div>
+            {% endif %}
+            <div class="three-keys__card-stat">
+              <div class="three-keys__card-stat-content">
+                {% if block.settings.stat_value != blank %}
+                  <span class="three-keys__card-stat-value">{{ block.settings.stat_value }}</span>
+                {% endif %}
+                {% if block.settings.stat_description != blank %}
+                  <p class="three-keys__card-stat-desc">{{ block.settings.stat_description }}</p>
+                {% endif %}
+              </div>
+              {% if block.settings.icon_filename != blank %}
+                <div class="three-keys__card-icon">
+                  <img
+                    src="{{ block.settings.icon_filename | asset_url }}"
+                    alt=""
+                    width="48"
+                    height="44"
+                    loading="lazy"
+                  >
+                </div>
+              {% endif %}
+            </div>
+            {% if block.settings.button_text != blank %}
+              <a
+                {% if block.settings.button_url != blank %}href="{{ block.settings.button_url }}"{% endif %}
+                class="three-keys__card-button"
+              >
+                {{ block.settings.button_text }}
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </three-keys-cards>
+  </div>
+</div>
+
+{% stylesheet %}
+  .three-keys__content {
+    max-width: 1200px;
+    margin-inline: auto;
+    width: 100%;
+    padding-inline: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .three-keys__header {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .three-keys__heading {
+    font-family: var(--font-heading--family);
+    font-weight: 400;
+    font-size: 48px;
+    line-height: 52px;
+    letter-spacing: -1px;
+    color: #767676;
+
+    & p {
+      margin: 0;
+    }
+
+    & strong {
+      font-family: var(--font-body--family);
+      font-weight: 700;
+    }
+  }
+
+  .three-keys__subtitle {
+    font-family: var(--font-body--family);
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+    color: #767676;
+    margin: 0;
+  }
+
+  .three-keys__divider {
+    border: none;
+    border-top: 1px solid #e0e0e0;
+    margin: 0;
+    width: 100%;
+  }
+
+  .three-keys__bold-subtitle {
+    font-family: var(--font-body--family);
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 24px;
+    color: #767676;
+    margin: 0;
+  }
+
+  .three-keys__cards {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    padding-block: 16px;
+  }
+
+  .three-keys__card {
+    flex: 1;
+    border-radius: 16px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background-color: var(--card-bg);
+    overflow: hidden;
+  }
+
+  .three-keys__card-header {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .three-keys__card-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    border-radius: 50%;
+    border: 1px solid #ffffff;
+    font-family: var(--font-accent--family);
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 20px;
+    letter-spacing: 0.75px;
+    text-transform: uppercase;
+    text-align: center;
+    color: #ffffff;
+    box-sizing: border-box;
+  }
+
+  .three-keys__card-title {
+    font-family: var(--font-accent--family);
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 20px;
+    letter-spacing: 0.75px;
+    text-transform: uppercase;
+    color: #ffffff;
+  }
+
+  .three-keys__card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding-block: 20px 0;
+  }
+
+  .three-keys__card-intro {
+    padding-inline: 8px;
+  }
+
+  .three-keys__card-intro-text {
+    font-family: var(--font-heading--family);
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 28px;
+    letter-spacing: -1px;
+    color: #ffffff;
+    margin: 0;
+  }
+
+  .three-keys__card-stat {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 20px;
+  }
+
+  .three-keys__card-stat-content {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .three-keys__card-stat-value {
+    font-family: var(--font-body--family);
+    font-weight: 700;
+    font-size: 48px;
+    line-height: 52px;
+    color: #ffffff;
+  }
+
+  .three-keys__card-stat-desc {
+    font-family: var(--font-body--family);
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 24px;
+    letter-spacing: -0.5px;
+    color: #ffffff;
+    margin: 0;
+  }
+
+  .three-keys__card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .three-keys__card-icon img {
+    display: block;
+    width: 48px;
+    height: 44px;
+  }
+
+  .three-keys__card-button {
+    display: block;
+    width: 100%;
+    text-align: center;
+    border-radius: 28px;
+    border: 1px solid #ffffff;
+    background: transparent;
+    padding: 8px 16px;
+    font-family: var(--font-accent--family);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    letter-spacing: 0.75px;
+    text-transform: uppercase;
+    color: #ffffff;
+    text-decoration: none;
+    box-sizing: border-box;
+    cursor: pointer;
+  }
+
+  @media screen and (max-width: 749px) {
+    .three-keys__content {
+      gap: 20px;
+    }
+
+    .three-keys__header {
+      gap: 20px;
+    }
+
+    .three-keys__heading {
+      font-size: 32px;
+      line-height: 36px;
+    }
+
+    .three-keys__subtitle {
+      font-size: 18px;
+      line-height: 20px;
+    }
+
+    .three-keys__bold-subtitle {
+      font-size: 18px;
+      line-height: 20px;
+    }
+
+    .three-keys__cards {
+      flex-direction: column;
+      gap: 0;
+      padding-block: 0;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .three-keys__card {
+      border-radius: 16px 16px 0 0;
+      padding: 20px 16px 40px 16px;
+      gap: 8px;
+    }
+
+    .three-keys__card + .three-keys__card {
+      margin-top: -24px;
+    }
+
+    .three-keys__card-number {
+      font-size: 16px;
+      line-height: 18px;
+    }
+
+    .three-keys__card-title {
+      font-size: 16px;
+      line-height: 18px;
+    }
+
+    .three-keys__card-intro-text {
+      font-size: 20px;
+      line-height: 24px;
+    }
+
+    .three-keys__card-stat-value {
+      font-size: 32px;
+      line-height: 36px;
+    }
+
+    .three-keys__card-stat-desc {
+      font-size: 16px;
+      line-height: 20px;
+    }
+
+    .three-keys__card-button {
+      font-size: 12px;
+      line-height: 14px;
+    }
+
+    /* Accordion behavior — only active when JS has initialized */
+    three-keys-cards[data-accordion-active] .three-keys__card[data-expanded="false"] {
+      padding: 20px 16px 48px 16px;
+      gap: 0;
+      cursor: pointer;
+    }
+
+    three-keys-cards[data-accordion-active] .three-keys__card[data-expanded="false"]:last-child {
+      padding: 24px 16px;
+    }
+
+    three-keys-cards[data-accordion-active] .three-keys__card[data-expanded="false"] .three-keys__card-body {
+      display: none;
+    }
+
+    three-keys-cards[data-accordion-active] .three-keys__card[data-expanded="true"] {
+      cursor: default;
+    }
+  }
+{% endstylesheet %}
+
+<script>
+  if (!customElements.get('three-keys-cards')) {
+    class ThreeKeysCards extends HTMLElement {
+      connectedCallback() {
+        this.setAttribute('data-accordion-active', '');
+        this.addEventListener('click', this.handleClick.bind(this));
+      }
+
+      handleClick(event) {
+        if (window.innerWidth >= 750) return;
+
+        const card = event.target.closest('.three-keys__card');
+        if (!card || !this.contains(card)) return;
+
+        if (card.dataset.expanded === 'true') return;
+
+        for (const c of this.querySelectorAll('.three-keys__card')) {
+          c.dataset.expanded = (c === card) ? 'true' : 'false';
+        }
+      }
+    }
+
+    customElements.define('three-keys-cards', ThreeKeysCards);
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Three Keys",
+  "tag": "section",
+  "class": "three-keys-wrapper section-wrapper",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "<p>There's nothing more <strong>fundamental to longevity</strong> than Cardiovascular Health.</p>"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Powered through nitric oxide and  better blood flow."
+    },
+    {
+      "type": "text",
+      "id": "bold_subtitle",
+      "label": "Bold subtitle",
+      "default": "The 3 Keys to Cardiovascular Health"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_divider",
+      "label": "Show divider",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 80,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 80,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "key-card",
+      "name": "Key card",
+      "settings": [
+        {
+          "type": "color",
+          "id": "card_color",
+          "label": "Card color",
+          "default": "#8C0132"
+        },
+        {
+          "type": "text",
+          "id": "number",
+          "label": "Number",
+          "default": "1"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Blood Pressure"
+        },
+        {
+          "type": "textarea",
+          "id": "intro_text",
+          "label": "Intro text",
+          "default": "Healthy blood pressure starts with blood flow, and blood flow starts with nitric oxide."
+        },
+        {
+          "type": "text",
+          "id": "stat_value",
+          "label": "Stat value",
+          "default": "2x"
+        },
+        {
+          "type": "textarea",
+          "id": "stat_description",
+          "label": "Stat description",
+          "default": "more effective blood pressure support when compared to diet and exercise alone.¹"
+        },
+        {
+          "type": "text",
+          "id": "icon_filename",
+          "label": "Icon filename",
+          "default": "icon.svg"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button text",
+          "default": "SHOP Blood Pressure"
+        },
+        {
+          "type": "url",
+          "id": "button_url",
+          "label": "Button URL"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Three Keys",
+      "category": "t:categories.storytelling",
+      "blocks": [
+        {
+          "type": "key-card",
+          "settings": {
+            "card_color": "#8C0132",
+            "number": "1",
+            "title": "Blood Pressure",
+            "intro_text": "Healthy blood pressure starts with blood flow, and blood flow starts with nitric oxide.",
+            "stat_value": "2x",
+            "stat_description": "more effective blood pressure support when compared to diet and exercise alone.¹",
+            "icon_filename": "icon.svg",
+            "button_text": "SHOP Blood Pressure"
+          }
+        },
+        {
+          "type": "key-card",
+          "settings": {
+            "card_color": "#E6305E",
+            "number": "2",
+            "title": "Metabolic",
+            "intro_text": "Help your body use energy more smoothly and steadily.",
+            "stat_value": "78%",
+            "stat_description": "of customers report improved energy levels, after completing their first 90-day routine.",
+            "icon_filename": "icon-2.svg",
+            "button_text": "SHOP Metabolic"
+          }
+        },
+        {
+          "type": "key-card",
+          "settings": {
+            "card_color": "#D54427",
+            "number": "3",
+            "title": "Cholesterol",
+            "intro_text": "Help your body keep cholesterol levels in a healthy range.",
+            "stat_value": "29%",
+            "stat_description": "reduction in LDL (bad cholesterol) and a 11% reduction in total cholesterol.",
+            "icon_filename": "icon-3.svg",
+            "button_text": "SHOP Cholesterol"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
