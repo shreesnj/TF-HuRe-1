@@ -1,0 +1,180 @@
+<script
+  src="{{ 'marquee.js' | asset_url }}"
+  type="module"
+  fetchpriority="low"
+></script>
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<marquee-component
+  class="money-back section spacing-style color-{{ section.settings.color_scheme }}"
+  style="
+    {%- render 'spacing-style', settings: section.settings %};
+    --money-back-divider-width: {{ section.settings.divider_width }}px;
+    --marquee-direction: {{ section.settings.movement_direction }};
+  "
+  data-speed-factor="25"
+  data-movement-direction="{{ section.settings.movement_direction }}"
+>
+  <div
+    class="money-back__wrapper"
+    ref="wrapper"
+  >
+    <div
+      class="money-back__content"
+      ref="content"
+    >
+      <div
+        class="money-back__items"
+        ref="marqueeItems[]"
+      >
+        {% for i in (1..4) %}
+          <span class="money-back__text">{{ section.settings.text }}</span>
+          <span class="money-back__divider" aria-hidden="true"></span>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</marquee-component>
+
+{% stylesheet %}
+  marquee-component.money-back {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    --money-back-gap: 32px;
+  }
+
+  .money-back__wrapper {
+    display: flex;
+    gap: var(--money-back-gap);
+    width: fit-content;
+    white-space: nowrap;
+  }
+
+  .money-back__content {
+    min-width: max-content;
+    display: flex;
+    gap: var(--money-back-gap);
+  }
+
+  .money-back__items {
+    min-width: max-content;
+    display: flex;
+    gap: var(--money-back-gap);
+    align-items: center;
+  }
+
+  .money-back__text {
+    font-family: var(--font-body--family);
+    font-size: 14px;
+    line-height: 16px;
+    letter-spacing: 0.75px;
+    text-transform: uppercase;
+    color: var(--color-foreground);
+    white-space: nowrap;
+  }
+
+  .money-back__divider {
+    width: var(--money-back-divider-width, 60px);
+    height: 1px;
+    background-color: var(--color-border);
+    flex-shrink: 0;
+  }
+
+  @keyframes money-back-motion {
+    to {
+      transform: translate3d(calc(-50% - (var(--money-back-gap) / 2)), 0, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    marquee-component.money-back:not([data-disabled]) .money-back__wrapper {
+      animation: money-back-motion var(--marquee-speed) linear infinite var(--marquee-direction);
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    marquee-component.money-back {
+      --money-back-gap: 16px;
+    }
+
+    .money-back__text {
+      font-size: 12px;
+      line-height: 14px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Money Back Guarantee",
+  "tag": "section",
+  "class": "money-back-wrapper section-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Text",
+      "default": "MONEY BACK GUARANTEE"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-9"
+    },
+    {
+      "type": "select",
+      "id": "movement_direction",
+      "label": "Motion direction",
+      "options": [
+        {
+          "value": "normal",
+          "label": "Forward"
+        },
+        {
+          "value": "reverse",
+          "label": "Reverse"
+        }
+      ],
+      "default": "normal"
+    },
+    {
+      "type": "number",
+      "id": "divider_width",
+      "label": "Divider width",
+      "default": 60
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    }
+  ],
+  "presets": [
+    {
+      "name": "Money Back Guarantee",
+      "category": "t:categories.text"
+    }
+  ]
+}
+{% endschema %}

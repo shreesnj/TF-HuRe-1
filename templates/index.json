@@ -605,6 +605,17 @@
         "padding-block-end": 80
       }
     },
+    "money_back_guarantee": {
+      "type": "money-back-guarantee",
+      "settings": {
+        "text": "MONEY BACK GUARANTEE",
+        "color_scheme": "scheme-9",
+        "movement_direction": "normal",
+        "divider_width": 60,
+        "padding-block-start": 16,
+        "padding-block-end": 16
+      }
+    },
     "impact": {
       "type": "impact",
       "blocks": {
@@ -662,6 +673,7 @@
     "one_routine",
     "backed_by",
     "science",
-    "impact"
+    "impact",
+    "money_back_guarantee"
   ]
 }
