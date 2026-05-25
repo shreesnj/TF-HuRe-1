@@ -1,0 +1,1019 @@
+{%- liquid
+  assign heading = section.settings.heading
+  assign subtitle_label = section.settings.subtitle_label
+  assign doctor_text = section.settings.doctor_text
+  assign total_label = section.settings.total_label
+  assign original_price = section.settings.original_price
+  assign sale_price = section.settings.sale_price
+  assign button_text = section.settings.button_text
+  assign button_url = section.settings.button_url
+  assign button_color = section.settings.button_color
+  assign truemed_text = section.settings.truemed_text
+  assign truemed_link_text = section.settings.truemed_link_text
+  assign truemed_link_url = section.settings.truemed_link_url
+-%}
+
+<div
+  id="OneRoutine-{{ section.id }}"
+  class="one-routine spacing-style color-{{ section.settings.color_scheme }}"
+  style="
+    {% render 'spacing-style', settings: section.settings %}
+    --or-button-color: {{ button_color }};
+  "
+>
+  <div class="one-routine__wrapper">
+    {%- comment -%} Left column {%- endcomment -%}
+    <div class="one-routine__left-col">
+      {% if subtitle_label != blank %}
+        <span class="one-routine__label">{{ subtitle_label }}</span>
+      {% endif %}
+
+      {% if heading != blank %}
+        <div class="one-routine__heading">{{ heading }}</div>
+      {% endif %}
+
+      <div class="one-routine__doctor">
+        <div class="one-routine__doctor-avatar">
+          {% if section.settings.doctor_image != blank %}
+            <img
+              src="{{ section.settings.doctor_image | image_url: width: 96 }}"
+              alt="Doctor avatar"
+              width="48"
+              height="48"
+              loading="lazy"
+              class="one-routine__doctor-img"
+            >
+          {% endif %}
+          <span class="one-routine__doctor-check" aria-hidden="true">
+            <img
+              src="{{ 'check-solid-2.svg' | asset_url }}"
+              alt=""
+              width="8"
+              height="8"
+            >
+          </span>
+        </div>
+        {% if doctor_text != blank %}
+          <p class="one-routine__doctor-text">{{ doctor_text }}</p>
+        {% endif %}
+      </div>
+
+      <div class="one-routine__hero">
+        {% if section.settings.hero_image != blank or section.settings.hero_image_mobile != blank %}
+          <picture>
+            {% if section.settings.hero_image != blank %}
+              <source
+                media="(min-width: 750px)"
+                srcset="{{ section.settings.hero_image | image_url: width: 1200 }}"
+              >
+            {% endif %}
+            {%- liquid
+              if section.settings.hero_image_mobile != blank
+                assign mobile_img = section.settings.hero_image_mobile
+              else
+                assign mobile_img = section.settings.hero_image
+              endif
+            -%}
+            {% if mobile_img != blank %}
+              <img
+                src="{{ mobile_img | image_url: width: 750 }}"
+                alt="Product hero image"
+                width="{{ mobile_img.width }}"
+                height="{{ mobile_img.height }}"
+                loading="lazy"
+                class="one-routine__hero-img"
+              >
+            {% endif %}
+          </picture>
+        {% endif %}
+
+        {%- comment -%} Badge blocks {%- endcomment -%}
+        <div class="one-routine__badges">
+          {% for block in section.blocks %}
+            {% if block.type == 'badge' %}
+              <span
+                class="one-routine__badge"
+                style="background-color: {{ block.settings.bg_color }};"
+                {{ block.shopify_attributes }}
+              >
+                {{ block.settings.text }}
+              </span>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    {%- comment -%} Right column {%- endcomment -%}
+    <div class="one-routine__right-col">
+      <div class="one-routine__products">
+        {% for block in section.blocks %}
+          {% if block.type == 'product-item' %}
+            <div class="one-routine__item" {{ block.shopify_attributes }}>
+              <div class="one-routine__item-img">
+                {% if block.settings.image != blank %}
+                  <img
+                    src="{{ block.settings.image | image_url: width: 180 }}"
+                    alt="{{ block.settings.title | escape }}"
+                    width="90"
+                    height="80"
+                    loading="lazy"
+                  >
+                {% endif %}
+              </div>
+              <div class="one-routine__item-content">
+                <div class="one-routine__item-title-row">
+                  {% if block.settings.show_dot %}
+                    <span class="one-routine__item-dot" style="background-color: {{ block.settings.dot_color }};"></span>
+                  {% endif %}
+                  {% if block.settings.title != blank %}
+                    <span class="one-routine__item-title">{{ block.settings.title }}</span>
+                  {% endif %}
+                </div>
+                {% if block.settings.show_price %}
+                  <div class="one-routine__item-price">
+                    {% if block.settings.original_price != blank %}
+                      <span class="one-routine__item-price-original">{{ block.settings.original_price }}</span>
+                    {% endif %}
+                    {% if block.settings.sale_price != blank %}
+                      <span class="one-routine__item-price-sale">{{ block.settings.sale_price }}</span>
+                    {% endif %}
+                  </div>
+                {% else %}
+                  {% if block.settings.description != blank %}
+                    <p class="one-routine__item-desc">{{ block.settings.description }}</p>
+                  {% endif %}
+                {% endif %}
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+
+        {%- comment -%} Price bar {%- endcomment -%}
+        <div class="one-routine__price-bar">
+          <div class="one-routine__price-set">
+            {% if total_label != blank %}
+              <span class="one-routine__price-label">{{ total_label }}</span>
+            {% endif %}
+            {% if original_price != blank %}
+              <span class="one-routine__price-original">{{ original_price }}</span>
+            {% endif %}
+            {% if sale_price != blank %}
+              <span class="one-routine__price-sale">{{ sale_price }}</span>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div class="one-routine__actions">
+        <div class="one-routine__benefits">
+          {% if section.settings.benefit_1 != blank %}
+            <span class="one-routine__benefit">{{ section.settings.benefit_1 }}</span>
+          {% endif %}
+          {% if section.settings.benefit_2 != blank %}
+            <span class="one-routine__benefit">{{ section.settings.benefit_2 }}</span>
+          {% endif %}
+          {% if section.settings.benefit_3 != blank %}
+            <span class="one-routine__benefit">{{ section.settings.benefit_3 }}</span>
+          {% endif %}
+        </div>
+
+        {% if button_text != blank %}
+          <a
+            {% if button_url != blank %}href="{{ button_url }}"{% endif %}
+            class="one-routine__button"
+          >
+            {{ button_text }}
+          </a>
+        {% endif %}
+
+        <div class="one-routine__truemed">
+          {% if section.settings.truemed_image != blank %}
+            <img
+              src="{{ section.settings.truemed_image | image_url: width: 138 }}"
+              alt="Truemed"
+              width="69"
+              height="12"
+              loading="lazy"
+              class="one-routine__truemed-logo"
+            >
+          {% endif %}
+          {% if truemed_text != blank %}
+            <span class="one-routine__truemed-text">{{ truemed_text }}</span>
+          {% endif %}
+          {% if truemed_link_text != blank %}
+            <a
+              {% if truemed_link_url != blank %}href="{{ truemed_link_url }}"{% endif %}
+              class="one-routine__truemed-link"
+            >
+              {{ truemed_link_text }}
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .one-routine__wrapper {
+    max-width: 1200px;
+    margin-inline: auto;
+    width: 100%;
+    padding-inline: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .one-routine__wrapper {
+      flex-direction: row;
+      gap: 24px;
+      align-items: center;
+      padding-inline: 120px;
+    }
+  }
+
+  /* Columns */
+  .one-routine__left-col,
+  .one-routine__right-col {
+    display: contents;
+  }
+
+  @media screen and (min-width: 750px) {
+    .one-routine__left-col,
+    .one-routine__right-col {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      flex: 1;
+    }
+  }
+
+  /* Label */
+  .one-routine__label {
+    font-family: var(--font-body--family);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    letter-spacing: 0.75px;
+    text-transform: uppercase;
+    color: #767676;
+    order: 1;
+    display: none;
+  }
+
+  @media screen and (min-width: 750px) {
+    .one-routine__label {
+      display: block;
+      order: unset;
+    }
+  }
+
+  /* Heading */
+  .one-routine__heading {
+    font-family: var(--font-heading--family);
+    font-weight: 400;
+    font-size: 32px;
+    line-height: 36px;
+    letter-spacing: -1px;
+    color: #767676;
+    order: 1;
+
+    & p {
+      margin: 0;
+    }
+
+    & strong {
+      font-weight: 700;
+    }
+  }
+
+  @media screen and (min-width: 750px) {
+    .one-routine__heading {
+      font-size: 48px;
+      line-height: 52px;
+      order: unset;
+    }
+  }
+
+  /* Doctor endorsement */
+  .one-routine__doctor {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    background-color: #F5F5F5;
+    border-radius: 8px;
+    padding: 12px;
+    align-items: center;
+    order: 5;
+  }
+
+  @media screen and (min-width: 750px) {
+    .one-routine__doctor {
+      order: unset;
+    }
+  }
+
+  .one-routine__doctor-avatar {
+    position: relative;
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+  }
+
+  .one-routine__doctor-img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .one-routine__doctor-check {
+    position: absolute;
+    bottom: -2px;
+    right: -4px;
+    width: 16px;
+    height: 16px;
+    background-color: #414141;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .one-routine__doctor-text {
+    font-family: var(--font-subheading--family);
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 18px;
+    color: #767676;
+    margin: 0;
+  }
+
+  @media screen and (min-width: 750px) {
+    .one-routine__doctor-text {
+      font-size: 16px;
+      line-height: 20px;
+    }
+  }
+
+  /* Hero image */
+  .one-routine__hero {
+    position: relative;
+    order: 2;
+  }
+
+  @media screen and (min-width: 750px) {
+    .one-routine__hero {
+      order: unset;
+    }
+  }
+
+  .one-routine__hero-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+  }
+
+  /* Badges */
+  .one-routine__badges {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .one-routine__badge {
+    position: absolute;
+    border-radius: 24px;
+    padding: 8px 16px;
+    font-family: var(--font-subheading--family);
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 20px;
+    color: #FFFFFF;
+    white-space: nowrap;
+    pointer-events: auto;
+  }
+
+  .one-routine__badge:nth-child(1) {
+    top: 8%;
+    right: 0;
+  }
+
+  .one-routine__badge:nth-child(2) {
+    top: 48%;
+    left: -8px;
+  }
+
+  .one-routine__badge:nth-child(3) {
+    bottom: 8%;
+    right: 0;
+  }
+
+  @media screen and (min-width: 750px) {
+    .one-routine__badge:nth-child(1) {
+      top: 4%;
+      right: 4%;
+    }
+
+    .one-routine__badge:nth-child(2) {
+      top: 40%;
+      left: -16px;
+    }
+
+    .one-routine__badge:nth-child(3) {
+      bottom: 12%;
+      right: 4%;
+    }
+  }
+
+  /* Products list */
+  .one-routine__products {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    order: 3;
+  }
+
+  @media screen and (min-width: 750px) {
+    .one-routine__products {
+      order: unset;
+    }
+  }
+
+  .one-routine__item {
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+    justify-content: space-between;
+    padding: 4px 0 8px;
+    border-bottom: 1px solid #D9D9DB;
+  }
+
+  @media screen and (min-width: 750px) {
+    .one-routine__item {
+      padding: 8px 0;
+    }
+  }
+
+  .one-routine__item-img {
+    width: 90px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    & img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+    }
+  }
+
+  .one-routine__item-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px 12px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .one-routine__item-title-row {
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+    align-items: center;
+  }
+
+  .one-routine__item-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: inline-block;
+  }
+
+  .one-routine__item-title {
+    font-family: var(--font-subheading--family);
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 20px;
+    color: #414141;
+  }
+
+  @media screen and (min-width: 750px) {
+    .one-routine__item-title {
+      font-size: 18px;
+      line-height: 24px;
+    }
+  }
+
+  .one-routine__item-desc {
+    font-family: var(--font-heading--family);
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: -0.5px;
+    color: #414141;
+    margin: 0;
+  }
+
+  @media screen and (min-width: 750px) {
+    .one-routine__item-desc {
+      font-size: 18px;
+      line-height: 24px;
+      color: #767676;
+    }
+  }
+
+  /* Price variant on item */
+  .one-routine__item-price {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .one-routine__item-price-original {
+    font-family: var(--font-heading--family);
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: -0.5px;
+    text-decoration: line-through;
+    color: #414141;
+  }
+
+  @media screen and (min-width: 750px) {
+    .one-routine__item-price-original {
+      font-size: 18px;
+      line-height: 24px;
+    }
+  }
+
+  .one-routine__item-price-sale {
+    font-family: var(--font-heading--family);
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: -0.5px;
+    color: #414141;
+  }
+
+  @media screen and (min-width: 750px) {
+    .one-routine__item-price-sale {
+      font-size: 18px;
+      line-height: 24px;
+    }
+  }
+
+  /* Price bar */
+  .one-routine__price-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #D9D9DB;
+    order: 4;
+  }
+
+  @media screen and (min-width: 750px) {
+    .one-routine__price-bar {
+      padding: 8px 4px 8px 16px;
+      order: unset;
+    }
+  }
+
+  .one-routine__price-set {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .one-routine__price-label {
+    font-family: var(--font-subheading--family);
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 20px;
+    color: #A0A0A0;
+  }
+
+  @media screen and (min-width: 750px) {
+    .one-routine__price-label {
+      font-size: 18px;
+      line-height: 24px;
+      letter-spacing: -0.5px;
+      color: #767676;
+      flex: 1;
+    }
+
+    .one-routine__price-set {
+      width: 100%;
+      justify-content: flex-end;
+    }
+  }
+
+  .one-routine__price-original {
+    font-family: var(--font-subheading--family);
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 24px;
+    text-decoration: line-through;
+    color: #A0A0A0;
+  }
+
+  @media screen and (min-width: 750px) {
+    .one-routine__price-original {
+      font-size: 20px;
+      line-height: 28px;
+    }
+  }
+
+  .one-routine__price-sale {
+    font-family: var(--font-subheading--family);
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 24px;
+    color: #414141;
+  }
+
+  @media screen and (min-width: 750px) {
+    .one-routine__price-sale {
+      font-size: 24px;
+      line-height: 28px;
+    }
+  }
+
+  /* Actions */
+  .one-routine__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    order: 6;
+  }
+
+  @media screen and (min-width: 750px) {
+    .one-routine__actions {
+      order: unset;
+    }
+  }
+
+  /* Benefits */
+  .one-routine__benefits {
+    display: flex;
+    flex-direction: row;
+    gap: 0;
+    justify-content: center;
+    align-items: center;
+    padding: 8px;
+    border-radius: 8px;
+  }
+
+  .one-routine__benefit {
+    font-family: var(--font-subheading--family);
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 18px;
+    color: #414141;
+    text-align: center;
+    flex: 1;
+    padding-inline: 8px;
+  }
+
+  .one-routine__benefit:not(:first-child) {
+    border-left: 1px solid #D9D9DB;
+  }
+
+  @media screen and (min-width: 750px) {
+    .one-routine__benefit {
+      font-size: 16px;
+      line-height: 20px;
+      color: #767676;
+    }
+  }
+
+  /* Button */
+  .one-routine__button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--or-button-color);
+    border-radius: 28px;
+    padding: 12px 20px;
+    font-family: var(--font-body--family);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 14px;
+    letter-spacing: 0.75px;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    width: 100%;
+    text-align: center;
+  }
+
+  @media screen and (min-width: 750px) {
+    .one-routine__button {
+      font-size: 16px;
+      line-height: 16px;
+    }
+  }
+
+  .one-routine__button:hover {
+    opacity: 0.9;
+  }
+
+  /* Truemed */
+  .one-routine__truemed {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 0;
+  }
+
+  .one-routine__truemed-logo {
+    width: 69px;
+    height: 12px;
+    object-fit: contain;
+    display: block;
+  }
+
+  .one-routine__truemed-text {
+    font-family: var(--font-subheading--family);
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+    color: #767676;
+  }
+
+  .one-routine__truemed-link {
+    font-family: var(--font-subheading--family);
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    color: #767676;
+    text-decoration: underline;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "One Routine",
+  "tag": "section",
+  "class": "one-routine-wrapper section-wrapper",
+  "blocks": [
+    {
+      "type": "product-item",
+      "name": "Product item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_dot",
+          "label": "Show dot",
+          "default": true
+        },
+        {
+          "type": "color",
+          "id": "dot_color",
+          "label": "Dot color",
+          "default": "#8C0132"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Product Name"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Description",
+          "default": "Product description text."
+        },
+        {
+          "type": "checkbox",
+          "id": "show_price",
+          "label": "Show price",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "original_price",
+          "label": "Original price",
+          "default": "$12.00"
+        },
+        {
+          "type": "text",
+          "id": "sale_price",
+          "label": "Sale price",
+          "default": "$0.00"
+        }
+      ]
+    },
+    {
+      "type": "badge",
+      "name": "Badge",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Category"
+        },
+        {
+          "type": "color",
+          "id": "bg_color",
+          "label": "Background color",
+          "default": "#8C0132"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "subtitle_label",
+      "label": "Subtitle label",
+      "default": "CARDIOLOGIST RECOMMENDED"
+    },
+    {
+      "type": "richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "<p>Heart health made easy with <strong>one routine.</strong></p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "doctor_image",
+      "label": "Doctor image"
+    },
+    {
+      "type": "text",
+      "id": "doctor_text",
+      "label": "Doctor text",
+      "default": "Our Chief Cardiologist, Dr. Christopher Davis, MD recommends this for daily heart support."
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero image (desktop)"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image_mobile",
+      "label": "Hero image (mobile)"
+    },
+    {
+      "type": "header",
+      "content": "Pricing"
+    },
+    {
+      "type": "text",
+      "id": "total_label",
+      "label": "Total label",
+      "default": "Total Price:"
+    },
+    {
+      "type": "text",
+      "id": "original_price",
+      "label": "Original price",
+      "default": "$100.00"
+    },
+    {
+      "type": "text",
+      "id": "sale_price",
+      "label": "Sale price",
+      "default": "$80.00"
+    },
+    {
+      "type": "header",
+      "content": "Benefits"
+    },
+    {
+      "type": "text",
+      "id": "benefit_1",
+      "label": "Benefit 1",
+      "default": "Delivered every 3 months"
+    },
+    {
+      "type": "text",
+      "id": "benefit_2",
+      "label": "Benefit 2",
+      "default": "50% OFF on first month"
+    },
+    {
+      "type": "text",
+      "id": "benefit_3",
+      "label": "Benefit 3",
+      "default": "90-day guarantee"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "SHOP ROUTINE"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Button URL"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Button color",
+      "default": "#BC0F0F"
+    },
+    {
+      "type": "header",
+      "content": "Truemed"
+    },
+    {
+      "type": "image_picker",
+      "id": "truemed_image",
+      "label": "Truemed logo"
+    },
+    {
+      "type": "text",
+      "id": "truemed_text",
+      "label": "Truemed text",
+      "default": "HSF-FSA eligible"
+    },
+    {
+      "type": "text",
+      "id": "truemed_link_text",
+      "label": "Truemed link text",
+      "default": "Learn more"
+    },
+    {
+      "type": "url",
+      "id": "truemed_link_url",
+      "label": "Truemed link URL"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 80,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 80,
+      "unit": "px"
+    }
+  ],
+  "presets": [
+    {
+      "name": "One Routine",
+      "category": "t:categories.storytelling"
+    }
+  ]
+}
+{% endschema %}
