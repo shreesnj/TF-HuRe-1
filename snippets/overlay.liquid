@@ -8,12 +8,18 @@
   {% render 'overlay', settings: section.settings, layer: 'var(--layer-raised)' %}
 {%- enddoc -%}
 
+{%- liquid
+  assign overlay_color_mobile = settings.overlay_color_mobile | default: settings.overlay_color
+-%}
+
 <div
   class="overlay overlay--{{ settings.overlay_style | default: 'gradient' }}"
   style="
     --overlay-layer: {{ layer | default: 'var(--layer-flat)' }};
     --overlay-color: {{ settings.overlay_color | default: 'rgb(0 0 0 / var(--opacity-25))' }};
     --overlay-color--end: {{ settings.overlay_color | color_modify: 'alpha', 0 | default: 'rgb(0 0 0 / 0)' }};
+    --overlay-color-mobile: {{ overlay_color_mobile | default: 'rgb(0 0 0 / var(--opacity-25))' }};
+    --overlay-color-mobile--end: {{ overlay_color_mobile | color_modify: 'alpha', 0 | default: 'rgb(0 0 0 / 0)' }};
     --overlay-direction: {{ settings.gradient_direction | default: 'to top' }};
     {%- if settings.border_radius %} --overlay-border-radius: {{ settings.border_radius | default: '0' }}px;{% endif -%}
   "
@@ -34,5 +40,9 @@
 
   .overlay--gradient {
     background: linear-gradient(var(--overlay-direction), var(--overlay-color), var(--overlay-color--end));
+
+    @media screen and (max-width: 749px) {
+      background: linear-gradient(var(--overlay-direction), var(--overlay-color-mobile), var(--overlay-color-mobile--end));
+    }
   }
 {% endstylesheet %}

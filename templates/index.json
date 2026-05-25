@@ -9,6 +9,18 @@
  */
  {
   "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "toggle_overlay": true,
+        "overlay_style": "gradient",
+        "gradient_direction": "to top",
+        "overlay_color": "#0000004D",
+        "overlay_color_mobile": "#0000007A",
+        "section_height": "large",
+        "section_width": "full-width"
+      }
+    },
     "hero_carousel": {
       "type": "hero-carousel",
       "blocks": {
@@ -248,6 +260,90 @@
         "color_scheme": "scheme-1",
         "padding-block-start": 48,
         "padding-block-end": 48
+      }
+    },
+    "bestsellers": {
+      "type": "bestsellers",
+      "blocks": {
+        "card_1": {
+          "type": "product-card",
+          "settings": {
+            "image": "shopify://shop_images/sbhc-1-front-1-mobile-I338499357513830.png",
+            "mobile_image": "shopify://shop_images/screenshot-2026-04-09-at-12-48-21-1-mobile-31614003.png",
+            "image_fit": "contain",
+            "product_title": "SuperBeets® Heart Chews",
+            "rating_score": "4.4",
+            "full_stars": 4,
+            "show_half_star": true,
+            "review_count": "(7,143)",
+            "badge_text": "#1 cardiologist recommended",
+            "badge_style": "filled",
+            "description": "Our signature product – supporting healthy blood pressure",
+            "cta_text": "Shop Now"
+          }
+        },
+        "card_2": {
+          "type": "product-card",
+          "settings": {
+            "image": "shopify://shop_images/screenshot-2026-04-09-at-12-48-21-1-mobile-31614027.png",
+            "product_title": "SuperBeets® Heart Powder",
+            "rating_score": "4.2",
+            "full_stars": 4,
+            "show_half_star": true,
+            "review_count": "(3,313)",
+            "badge_text": "1.2M+ sold",
+            "badge_style": "light",
+            "description": "Daily heart support, scoop by scoop.",
+            "cta_text": "Shop Now"
+          }
+        },
+        "card_3": {
+          "type": "product-card",
+          "settings": {
+            "image": "shopify://shop_images/screenshot-2026-04-09-at-12-48-21-1-mobile-31614051.png",
+            "product_title": "Cardiovascular Health Daily",
+            "rating_score": "4.5",
+            "full_stars": 4,
+            "show_half_star": true,
+            "review_count": "(7,138)",
+            "badge_text": "800K+ sold",
+            "badge_style": "light",
+            "description": "Daily support for healthy blood flow.",
+            "cta_text": "Shop Now"
+          }
+        },
+        "card_4": {
+          "type": "product-card",
+          "settings": {
+            "image": "shopify://shop_images/screenshot-2026-04-09-at-12-48-21-1-mobile-31614075.png",
+            "product_title": "Sport Pre-Workout Powder",
+            "rating_score": "4.5",
+            "full_stars": 4,
+            "show_half_star": true,
+            "review_count": "(475)",
+            "badge_text": "Athlete's choice",
+            "badge_style": "light",
+            "description": "Clean energy for your next session.",
+            "cta_text": "Shop Now"
+          }
+        }
+      },
+      "block_order": [
+        "card_1",
+        "card_2",
+        "card_3",
+        "card_4"
+      ],
+      "settings": {
+        "heading": "<p><strong>Bestsellers<\/strong> for cardiovascular support.<\/p>",
+        "show_divider": true,
+        "button_text": "Shop All",
+        "heading_color": "#767676",
+        "heading_bold_color": "#767676",
+        "star_color": "#BC0F0F",
+        "divider_color": "#D0D0D0",
+        "padding-block-start": 80,
+        "padding-block-end": 80
       }
     },
     "social_proof_reviews": {
@@ -510,9 +606,11 @@
     }
   },
   "order": [
+    "hero",
     "hero_carousel",
     "ask_me",
     "product_list_fa6P9H",
+    "bestsellers",
     "social_proof_reviews",
     "one_routine",
     "backed_by",

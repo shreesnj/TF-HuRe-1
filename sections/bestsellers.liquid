@@ -1,0 +1,729 @@
+{%- capture star_full_svg -%}
+<svg class="bestsellers__star" width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M18.96 7.8418L12.6025 7.17041L10 1.33301L7.39746 7.17041L1.04004 7.8418L5.78857 12.1216L4.46289 18.374L10 15.1807L15.5371 18.374L14.2114 12.1216L18.96 7.8418Z" fill="currentColor"/></svg>
+{%- endcapture -%}
+
+{%- capture star_half_svg -%}
+<svg class="bestsellers__star" width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1.33301L7.39746 7.17041L1.04004 7.8418L5.78857 12.1216L4.46289 18.374L10 15.1807V1.33301Z" fill="currentColor"/></svg>
+{%- endcapture -%}
+
+<div
+  id="Bestsellers-{{ section.id }}"
+  class="bestsellers spacing-style"
+  style="
+    {% render 'spacing-style', settings: section.settings %}
+    --heading-color: {{ section.settings.heading_color }};
+    --heading-bold-color: {{ section.settings.heading_bold_color }};
+    --star-color: {{ section.settings.star_color }};
+    --divider-color: {{ section.settings.divider_color }};
+  "
+>
+  <div class="bestsellers__header">
+    {% if section.settings.heading != blank %}
+      <div class="bestsellers__heading">{{ section.settings.heading }}</div>
+    {% endif %}
+    {% if section.settings.show_divider %}
+      <hr class="bestsellers__divider">
+    {% endif %}
+  </div>
+
+  <div class="bestsellers__carousel">
+    {% for block in section.blocks %}
+      {% if block.type == 'product-card' %}
+        <div class="bestsellers__card" {{ block.shopify_attributes }}>
+          <div class="bestsellers__card-image">
+            <picture>
+              {% if block.settings.mobile_image != blank %}
+                <source
+                  media="(max-width: 749px)"
+                  srcset="{{ block.settings.mobile_image | image_url: width: 600 }}"
+                >
+              {% endif %}
+              {% if block.settings.image != blank %}
+                <img
+                  class="bestsellers__card-img"
+                  src="{{ block.settings.image | image_url: width: 800 }}"
+                  alt="{{ block.settings.product_title | escape }}"
+                  loading="lazy"
+                  style="object-fit: {{ block.settings.image_fit }}"
+                >
+              {% endif %}
+            </picture>
+          </div>
+
+          <div class="bestsellers__card-content">
+            <h3 class="bestsellers__card-title">{{ block.settings.product_title }}</h3>
+
+            <div class="bestsellers__card-meta">
+              <div class="bestsellers__card-reviews">
+                <span class="bestsellers__card-score">{{ block.settings.rating_score }}</span>
+                <div class="bestsellers__card-stars" role="img" aria-label="{{ block.settings.rating_score }} out of 5 stars">
+                  {%- for i in (1..block.settings.full_stars) -%}
+                    {{ star_full_svg }}
+                  {%- endfor -%}
+                  {%- if block.settings.show_half_star -%}
+                    {{ star_half_svg }}
+                  {%- endif -%}
+                </div>
+                <span class="bestsellers__card-count">{{ block.settings.review_count }}</span>
+              </div>
+
+              {% if block.settings.badge_text != blank %}
+                <span class="bestsellers__card-badge bestsellers__card-badge--{{ block.settings.badge_style }}">{{ block.settings.badge_text }}</span>
+              {% endif %}
+            </div>
+
+            {% if block.settings.description != blank %}
+              <p class="bestsellers__card-description">{{ block.settings.description }}</p>
+            {% endif %}
+
+            <div class="bestsellers__card-cta">
+              <a
+                {% if block.settings.cta_url != blank %}href="{{ block.settings.cta_url }}"{% endif %}
+                class="bestsellers__card-link"
+              >
+                {{ block.settings.cta_text }}
+              </a>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  <div class="bestsellers__footer">
+    <a
+      {% if section.settings.button_url != blank %}href="{{ section.settings.button_url }}"{% endif %}
+      class="bestsellers__button"
+    >
+      {{ section.settings.button_text }}
+    </a>
+  </div>
+</div>
+
+{% stylesheet %}
+  .bestsellers {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    background: #FFFFFF;
+  }
+
+  .bestsellers__header {
+    max-width: 1200px;
+    width: 100%;
+    margin-inline: auto;
+    padding-inline: 12px;
+    box-sizing: border-box;
+  }
+
+  .bestsellers__heading {
+    font-family: var(--font-heading--family);
+    font-weight: 400;
+    font-size: 48px;
+    line-height: 52px;
+    color: var(--heading-color);
+
+    & p {
+      margin: 0;
+    }
+
+    & strong {
+      font-family: var(--font-body--family);
+      font-weight: 700;
+      color: var(--heading-bold-color);
+    }
+  }
+
+  .bestsellers__divider {
+    border: none;
+    border-bottom: 1px solid var(--divider-color);
+    margin: 0;
+    margin-top: 16px;
+  }
+
+  .bestsellers__carousel {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-inline-start: max(120px, calc((100vw - 1200px) / 2));
+    padding-inline-end: 20px;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .bestsellers__card {
+    flex: 0 0 340px;
+    border-radius: 16px;
+    overflow: hidden;
+    scroll-snap-align: start;
+    background: #F5F5F5;
+    display: flex;
+    flex-direction: column;
+
+    &:first-child {
+      flex: 0 0 374px;
+      border-radius: 18px;
+    }
+  }
+
+  .bestsellers__card-image {
+    height: 258px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: inherit;
+
+    .bestsellers__card:first-child & {
+      height: 273px;
+    }
+  }
+
+  .bestsellers__card-img {
+    width: 100%;
+    height: 100%;
+  }
+
+  .bestsellers__card-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+    justify-content: flex-end;
+
+    .bestsellers__card:first-child & {
+      padding: 22px;
+    }
+  }
+
+  .bestsellers__card-title {
+    font-family: var(--font-body--family);
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 24px;
+    color: #414141;
+    margin: 0;
+
+    .bestsellers__card:first-child & {
+      font-size: 22px;
+      line-height: 26px;
+    }
+  }
+
+  .bestsellers__card-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px 0;
+
+    .bestsellers__card:first-child & {
+      gap: 8.8px;
+      padding: 8.8px 0;
+    }
+  }
+
+  .bestsellers__card-reviews {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding-right: 4px;
+  }
+
+  .bestsellers__card-score {
+    font-family: var(--font-subheading--family);
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 24px;
+    letter-spacing: -0.5px;
+    color: var(--star-color);
+
+    .bestsellers__card:first-child & {
+      font-size: 19.8px;
+      line-height: 26px;
+      letter-spacing: -0.55px;
+    }
+  }
+
+  .bestsellers__card-stars {
+    display: flex;
+    gap: 0;
+    align-items: center;
+    color: var(--star-color);
+
+    & svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .bestsellers__card:first-child & svg {
+      width: 22px;
+      height: 22px;
+    }
+  }
+
+  .bestsellers__star {
+    display: block;
+    flex-shrink: 0;
+  }
+
+  .bestsellers__card-count {
+    font-family: var(--font-subheading--family);
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 24px;
+    letter-spacing: -0.5px;
+    color: #767676;
+
+    .bestsellers__card:first-child & {
+      font-size: 19.8px;
+      line-height: 26px;
+      letter-spacing: -0.55px;
+    }
+  }
+
+  .bestsellers__card-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    padding: 4px 12px;
+    font-family: var(--font-subheading--family);
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 20px;
+    width: fit-content;
+
+    &--filled {
+      background: #767676;
+      color: #FFFFFF;
+    }
+
+    &--light {
+      background: #FFFFFF;
+      color: #767676;
+    }
+
+    .bestsellers__card:first-child & {
+      font-size: 17.6px;
+      line-height: 22px;
+    }
+  }
+
+  .bestsellers__card-description {
+    font-family: var(--font-heading--family);
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 24px;
+    letter-spacing: -0.5px;
+    color: #767676;
+    margin: 0;
+
+    .bestsellers__card:first-child & {
+      font-size: 19.8px;
+      line-height: 26px;
+      letter-spacing: -0.55px;
+    }
+  }
+
+  .bestsellers__card-cta {
+    padding: 8px 0;
+  }
+
+  .bestsellers__card-link {
+    font-family: var(--font-subheading--family);
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+    color: #414141;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+
+    .bestsellers__card:first-child & {
+      font-size: 19.8px;
+      line-height: 26px;
+      letter-spacing: -0.55px;
+    }
+  }
+
+  .bestsellers__footer {
+    max-width: 1200px;
+    width: 100%;
+    margin-inline: auto;
+    padding-inline: 12px;
+    padding-block: 8px;
+    box-sizing: border-box;
+  }
+
+  .bestsellers__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #000000;
+    border-radius: 28px;
+    padding: 12px 20px;
+    font-family: var(--font-accent--family);
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 16px;
+    letter-spacing: 0.75px;
+    text-transform: uppercase;
+    color: #000000;
+    text-decoration: none;
+    background: transparent;
+    transition: background 0.2s, color 0.2s;
+
+    &:hover {
+      background: #000000;
+      color: #FFFFFF;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .bestsellers {
+      background: #F5F5F5;
+      gap: 20px;
+    }
+
+    .bestsellers__heading {
+      line-height: 36px;
+    }
+
+    .bestsellers__carousel {
+      padding-inline-start: 12px;
+      padding-inline-end: 12px;
+    }
+
+    .bestsellers__card {
+      flex: 0 0 280px;
+      background: #FFFFFF;
+
+      &:first-child {
+        flex: 0 0 280px;
+        border-radius: 16px;
+      }
+    }
+
+    .bestsellers__card-image {
+      height: 190px;
+
+      .bestsellers__card:first-child & {
+        height: 182px;
+      }
+    }
+
+    .bestsellers__card-content {
+      padding: 16px;
+
+      .bestsellers__card:first-child & {
+        padding: 16px;
+      }
+    }
+
+    .bestsellers__card-title {
+      font-size: 18px;
+      line-height: 20px;
+
+      .bestsellers__card:first-child & {
+        font-size: 18px;
+        line-height: 20px;
+      }
+    }
+
+    .bestsellers__card-meta {
+      .bestsellers__card:first-child & {
+        gap: 8px;
+        padding: 8px 0;
+      }
+    }
+
+    .bestsellers__card-score {
+      font-size: 16px;
+      line-height: 20px;
+      letter-spacing: -0.5px;
+
+      .bestsellers__card:first-child & {
+        font-size: 16px;
+        line-height: 20px;
+        letter-spacing: -0.5px;
+      }
+    }
+
+    .bestsellers__card-stars {
+      & svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      .bestsellers__card:first-child & svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    .bestsellers__card-count {
+      font-size: 16px;
+      line-height: 20px;
+
+      .bestsellers__card:first-child & {
+        font-size: 16px;
+        line-height: 20px;
+      }
+    }
+
+    .bestsellers__card-badge {
+      font-size: 14px;
+      line-height: 18px;
+
+      &--light {
+        background: #F5F5F5;
+      }
+
+      .bestsellers__card:first-child & {
+        font-size: 14px;
+        line-height: 18px;
+      }
+    }
+
+    .bestsellers__card-description {
+      font-size: 16px;
+      line-height: 20px;
+      letter-spacing: -0.5px;
+      color: #414141;
+
+      .bestsellers__card:first-child & {
+        font-size: 16px;
+        line-height: 20px;
+        letter-spacing: -0.5px;
+      }
+    }
+
+    .bestsellers__card-link {
+      font-size: 14px;
+      line-height: 18px;
+
+      .bestsellers__card:first-child & {
+        font-size: 14px;
+        line-height: 18px;
+        letter-spacing: 0;
+      }
+    }
+
+    .bestsellers__button {
+      width: 100%;
+      font-size: 14px;
+      line-height: 14px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Bestsellers",
+  "tag": "section",
+  "class": "bestsellers-wrapper section-wrapper",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "<p><strong>Bestsellers</strong> for cardiovascular support.</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_divider",
+      "label": "Show divider",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Shop All"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#767676"
+    },
+    {
+      "type": "color",
+      "id": "heading_bold_color",
+      "label": "Heading bold color",
+      "default": "#767676"
+    },
+    {
+      "type": "color",
+      "id": "star_color",
+      "label": "Star color",
+      "default": "#BC0F0F"
+    },
+    {
+      "type": "color",
+      "id": "divider_color",
+      "label": "Divider color",
+      "default": "#D0D0D0"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 80,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 80,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product-card",
+      "name": "Product card",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "mobile_image",
+          "label": "Mobile image"
+        },
+        {
+          "type": "select",
+          "id": "image_fit",
+          "label": "Image fit",
+          "default": "cover",
+          "options": [
+            { "value": "cover", "label": "Cover" },
+            { "value": "contain", "label": "Contain" }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "Content"
+        },
+        {
+          "type": "text",
+          "id": "product_title",
+          "label": "Title"
+        },
+        {
+          "type": "text",
+          "id": "rating_score",
+          "label": "Rating score",
+          "default": "4.5"
+        },
+        {
+          "type": "range",
+          "id": "full_stars",
+          "label": "Full stars",
+          "min": 0,
+          "max": 5,
+          "step": 1,
+          "default": 4
+        },
+        {
+          "type": "checkbox",
+          "id": "show_half_star",
+          "label": "Show half star",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "review_count",
+          "label": "Review count"
+        },
+        {
+          "type": "text",
+          "id": "badge_text",
+          "label": "Badge text"
+        },
+        {
+          "type": "select",
+          "id": "badge_style",
+          "label": "Badge style",
+          "default": "light",
+          "options": [
+            { "value": "filled", "label": "Filled" },
+            { "value": "light", "label": "Light" }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Description"
+        },
+        {
+          "type": "header",
+          "content": "Link"
+        },
+        {
+          "type": "text",
+          "id": "cta_text",
+          "label": "Link text",
+          "default": "Shop Now"
+        },
+        {
+          "type": "url",
+          "id": "cta_url",
+          "label": "Link URL"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "Bestsellers",
+      "category": "t:categories.storytelling"
+    }
+  ]
+}
+{% endschema %}
