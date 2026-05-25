@@ -78,11 +78,19 @@
       </nav>
     </details>
   {% endcapture %}
+  {%- liquid
+    assign should_disable_on_desktop = true
+    assign should_open_by_default_on_desktop = true
+    if show_as_accordion == true and block_settings.accordion_on_desktop == true
+      assign should_disable_on_desktop = false
+      assign should_open_by_default_on_desktop = false
+    endif
+  -%}
   {% render 'accordion-custom-component',
     children: menu_accordion_children,
     class: menu_class,
-    disable_on_desktop: true,
-    open_by_default_on_desktop: true,
+    disable_on_desktop: should_disable_on_desktop,
+    open_by_default_on_desktop: should_open_by_default_on_desktop,
     disable_on_mobile: should_disable_on_mobile,
     open_by_default_on_mobile: should_open_by_default_on_mobile
   %}
@@ -202,6 +210,13 @@
       "type": "checkbox",
       "id": "accordion_dividers",
       "label": "t:settings.dividers",
+      "default": false,
+      "visible_if": "{{ block.settings.show_as_accordion == true }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "accordion_on_desktop",
+      "label": "Accordion on desktop",
       "default": false,
       "visible_if": "{{ block.settings.show_as_accordion == true }}"
     },
