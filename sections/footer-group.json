@@ -14,14 +14,14 @@
     "footer": {
       "type": "footer",
       "blocks": {
-        "left_group": {
+        "main_wrapper": {
           "type": "group",
           "settings": {
             "content_direction": "column",
             "vertical_on_mobile": true,
             "horizontal_alignment_flex_direction_column": "flex-start",
             "vertical_alignment_flex_direction_column": "flex-start",
-            "gap": 8,
+            "gap": 40,
             "width": "fill",
             "width_mobile": "fill",
             "height": "fit",
@@ -36,247 +36,14 @@
             "padding-inline-end": 0
           },
           "blocks": {
-            "social_icons": {
-              "type": "social-links",
-              "settings": {
-                "facebook_url": "https://www.facebook.com/humann",
-                "instagram_url": "https://www.instagram.com/humann",
-                "twitter_url": "https://x.com/humann"
-              }
-            },
-            "menu_shop_product": {
-              "type": "menu",
-              "settings": {
-                "menu": "main-menu",
-                "heading": "Shop by Product",
-                "menu_spacing": 0,
-                "show_as_accordion": true,
-                "accordion_icon": "plus",
-                "accordion_dividers": true,
-                "accordion_on_desktop": true,
-                "inherit_color_scheme": true,
-                "heading_preset": "paragraph",
-                "link_preset": "paragraph",
-                "padding-block-start": 8,
-                "padding-block-end": 8,
-                "padding-inline-start": 8,
-                "padding-inline-end": 8
-              }
-            },
-            "menu_shop_benefit": {
-              "type": "menu",
-              "settings": {
-                "menu": "main-menu",
-                "heading": "Shop by Benefit",
-                "menu_spacing": 0,
-                "show_as_accordion": true,
-                "accordion_icon": "plus",
-                "accordion_dividers": true,
-                "accordion_on_desktop": true,
-                "inherit_color_scheme": true,
-                "heading_preset": "paragraph",
-                "link_preset": "paragraph",
-                "padding-block-start": 8,
-                "padding-block-end": 8,
-                "padding-inline-start": 8,
-                "padding-inline-end": 8
-              }
-            },
-            "menu_our_science": {
-              "type": "menu",
-              "settings": {
-                "menu": "main-menu",
-                "heading": "Our Science",
-                "menu_spacing": 0,
-                "show_as_accordion": true,
-                "accordion_icon": "plus",
-                "accordion_dividers": true,
-                "accordion_on_desktop": true,
-                "inherit_color_scheme": true,
-                "heading_preset": "paragraph",
-                "link_preset": "paragraph",
-                "padding-block-start": 8,
-                "padding-block-end": 8,
-                "padding-inline-start": 8,
-                "padding-inline-end": 8
-              }
-            },
-            "menu_support": {
-              "type": "menu",
-              "settings": {
-                "menu": "main-menu",
-                "heading": "Support",
-                "menu_spacing": 0,
-                "show_as_accordion": true,
-                "accordion_icon": "plus",
-                "accordion_dividers": true,
-                "accordion_on_desktop": true,
-                "inherit_color_scheme": true,
-                "heading_preset": "paragraph",
-                "link_preset": "paragraph",
-                "padding-block-start": 8,
-                "padding-block-end": 8,
-                "padding-inline-start": 8,
-                "padding-inline-end": 8
-              }
-            },
-            "newsletter_group": {
-              "type": "group",
-              "settings": {
-                "content_direction": "column",
-                "horizontal_alignment_flex_direction_column": "flex-start",
-                "vertical_alignment_flex_direction_column": "flex-start",
-                "gap": 10,
-                "width": "fill",
-                "width_mobile": "fill",
-                "height": "fit",
-                "inherit_color_scheme": true,
-                "background_media": "none",
-                "border": "none",
-                "border_radius": 0,
-                "toggle_overlay": false,
-                "padding-block-start": 20,
-                "padding-block-end": 20,
-                "padding-inline-start": 8,
-                "padding-inline-end": 8
-              },
-              "blocks": {
-                "newsletter_heading": {
-                  "type": "text",
-                  "settings": {
-                    "text": "<p>Newsletter</p>",
-                    "width": "100%",
-                    "alignment": "left",
-                    "type_preset": "h3",
-                    "padding-block-start": 0,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
-                  }
-                },
-                "newsletter_subtitle": {
-                  "type": "text",
-                  "settings": {
-                    "text": "<p>Humann science in your inbox</p>",
-                    "width": "100%",
-                    "alignment": "left",
-                    "type_preset": "rte",
-                    "padding-block-start": 0,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
-                  }
-                },
-                "newsletter_form": {
-                  "type": "email-signup",
-                  "settings": {
-                    "width": "fill",
-                    "border_style": "all",
-                    "border_width": 1,
-                    "border_radius": 0,
-                    "style_class": "button-unstyled",
-                    "display_type": "arrow",
-                    "integrated_button": true,
-                    "padding-block-start": 0,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
-                  }
-                }
-              },
-              "block_order": [
-                "newsletter_heading",
-                "newsletter_subtitle",
-                "newsletter_form"
-              ]
-            }
-          },
-          "block_order": [
-            "social_icons",
-            "menu_shop_product",
-            "menu_shop_benefit",
-            "menu_our_science",
-            "menu_support",
-            "newsletter_group"
-          ]
-        },
-        "right_group": {
-          "type": "group",
-          "settings": {
-            "content_direction": "column",
-            "vertical_on_mobile": true,
-            "horizontal_alignment_flex_direction_column": "flex-start",
-            "vertical_alignment_flex_direction_column": "flex-start",
-            "gap": 8,
-            "width": "fill",
-            "width_mobile": "fill",
-            "height": "fit",
-            "inherit_color_scheme": true,
-            "background_media": "none",
-            "border": "none",
-            "border_radius": 0,
-            "toggle_overlay": false,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "contact_info": {
-              "type": "text",
-              "settings": {
-                "text": "<p>1250 S Capital of Texas Highway<br>Austin, TX 78746</p><p>(855) 636-4040</p><p>info@humann.com</p>",
-                "width": "100%",
-                "alignment": "left",
-                "type_preset": "rte",
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 8,
-                "padding-inline-end": 8
-              }
-            },
-            "disclaimer_group": {
-              "type": "group",
-              "settings": {
-                "content_direction": "column",
-                "horizontal_alignment_flex_direction_column": "flex-start",
-                "vertical_alignment_flex_direction_column": "center",
-                "gap": 10,
-                "width": "fill",
-                "width_mobile": "fill",
-                "height": "fit",
-                "inherit_color_scheme": true,
-                "background_media": "none",
-                "border": "solid",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 4,
-                "toggle_overlay": false,
-                "padding-block-start": 16,
-                "padding-block-end": 16,
-                "padding-inline-start": 16,
-                "padding-inline-end": 16
-              },
-              "blocks": {
-                "disclaimer_content": {
-                  "type": "custom-liquid",
-                  "settings": {
-                    "custom_liquid": "<div class=\"disclaimer-list\"><div class=\"disclaimer-list__item\"><span class=\"disclaimer-list__marker\">*</span><span class=\"disclaimer-list__text\">According to IQVIA ProVoice Survey 2024</span></div><div class=\"disclaimer-list__item\"><span class=\"disclaimer-list__marker\">1</span><span class=\"disclaimer-list__text\">Based on the combination of all sales data for medical practitioners and professionals for humann products sold through pro.humann.com and medical sales distributor partners from 12/1/23 to 11/30/2024.</span></div><div class=\"disclaimer-list__item\"><span class=\"disclaimer-list__marker\">2</span><span class=\"disclaimer-list__text\">In a 16-week, double-blind, placebo-controlled study involving 119 healthy men and women, Heart Chews' polyphenol compound, taken as part of a healthy lifestyle was clinically shown nearly 2-times as effective at promoting normal blood pressure already in the normal range as a healthy lifestyle alone.</span></div><div class=\"disclaimer-list__item\"><span class=\"disclaimer-list__marker\">3</span><span class=\"disclaimer-list__text\">Based on Amazon 5-star ratings and reviews as of May 2024 for SuperBeets Heart Chews, Powder, Collagen, Energy Plus, Circulation Gummies, Energy Gummies, Beet Root Capsules, Sport, Memory + Focus.</span></div></div>"
-                  }
-                }
-              },
-              "block_order": [
-                "disclaimer_content"
-              ]
-            },
-            "badges_group": {
+            "newsletter_row": {
               "type": "group",
               "settings": {
                 "content_direction": "row",
-                "vertical_on_mobile": false,
-                "horizontal_alignment": "center",
-                "vertical_alignment": "flex-end",
-                "gap": 8,
+                "vertical_on_mobile": true,
+                "horizontal_alignment": "space-between",
+                "vertical_alignment": "center",
+                "gap": 20,
                 "width": "fill",
                 "width_mobile": "fill",
                 "height": "fit",
@@ -291,39 +58,35 @@
                 "padding-inline-end": 0
               },
               "blocks": {
-                "copyright_text": {
+                "heading": {
                   "type": "text",
                   "settings": {
-                    "text": "<p>© 2025 Humann<br>Terms &amp; Conditions<br>Privacy Policy</p>",
-                    "width": "100%",
-                    "alignment": "right",
+                    "text": "<p>Stay in the know<br>Subscribe to our newsletter</p>",
+                    "width": "fit-content",
+                    "alignment": "left",
                     "type_preset": "custom",
-                    "font": "var(--font-body--family)",
-                    "font_size": "0.875rem",
+                    "font": "var(--font-heading--family)",
+                    "font_size": "1.75rem",
                     "line_height": "normal",
-                    "letter_spacing": "normal",
+                    "letter_spacing": "tight",
                     "case": "none",
-                    "color": "var(--color-foreground)",
-                    "padding-block-start": 4,
-                    "padding-block-end": 4,
+                    "color": "var(--color-foreground-heading)",
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
                     "padding-inline-start": 0,
                     "padding-inline-end": 0
                   }
                 },
-                "badge_usa": {
-                  "type": "custom-liquid",
+                "email_form": {
+                  "type": "email-signup",
                   "settings": {
-                    "custom_liquid": "<img src=\"{{ 'made-in-usa-1.svg' | asset_url }}\" alt=\"Made in USA\" width=\"105\" height=\"64\" loading=\"lazy\" style=\"display: block;\">"
-                  }
-                },
-                "badge_nsf": {
-                  "type": "image",
-                  "settings": {
-                    "image": "shopify://shop_images/screenshot-2026-04-18-at-16-11-10-1-mobile-31614462.png",
-                    "image_ratio": "adapt",
-                    "width": "fit-content",
-                    "width_mobile": "fit-content",
-                    "height": "fit",
+                    "width": "fill",
+                    "border_style": "underline",
+                    "border_width": 1,
+                    "border_radius": 0,
+                    "style_class": "button-unstyled",
+                    "display_type": "arrow",
+                    "integrated_button": true,
                     "padding-block-start": 0,
                     "padding-block-end": 0,
                     "padding-inline-start": 0,
@@ -332,40 +95,174 @@
                 }
               },
               "block_order": [
-                "copyright_text",
-                "badge_usa",
-                "badge_nsf"
+                "heading",
+                "email_form"
+              ]
+            },
+            "nav_promo_row": {
+              "type": "group",
+              "settings": {
+                "content_direction": "row",
+                "vertical_on_mobile": true,
+                "horizontal_alignment": "space-between",
+                "vertical_alignment": "flex-start",
+                "gap": 40,
+                "width": "fill",
+                "width_mobile": "fill",
+                "height": "fit",
+                "inherit_color_scheme": true,
+                "background_media": "none",
+                "border": "none",
+                "border_radius": 0,
+                "toggle_overlay": false,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "menu_shop": {
+                  "type": "menu",
+                  "settings": {
+                    "menu": "main-menu",
+                    "heading": "Shop",
+                    "menu_spacing": 16,
+                    "show_as_accordion": true,
+                    "accordion_icon": "caret",
+                    "accordion_dividers": true,
+                    "accordion_on_desktop": false,
+                    "inherit_color_scheme": true,
+                    "heading_preset": "paragraph",
+                    "link_preset": "paragraph",
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  }
+                },
+                "menu_tech": {
+                  "type": "menu",
+                  "settings": {
+                    "menu": "main-menu",
+                    "heading": "Technology",
+                    "menu_spacing": 16,
+                    "show_as_accordion": true,
+                    "accordion_icon": "caret",
+                    "accordion_dividers": true,
+                    "accordion_on_desktop": false,
+                    "inherit_color_scheme": true,
+                    "heading_preset": "paragraph",
+                    "link_preset": "paragraph",
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  }
+                },
+                "menu_support": {
+                  "type": "menu",
+                  "settings": {
+                    "menu": "main-menu",
+                    "heading": "Support",
+                    "menu_spacing": 16,
+                    "show_as_accordion": true,
+                    "accordion_icon": "caret",
+                    "accordion_dividers": true,
+                    "accordion_on_desktop": false,
+                    "inherit_color_scheme": true,
+                    "heading_preset": "paragraph",
+                    "link_preset": "paragraph",
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  }
+                },
+                "menu_company": {
+                  "type": "menu",
+                  "settings": {
+                    "menu": "main-menu",
+                    "heading": "Company",
+                    "menu_spacing": 16,
+                    "show_as_accordion": true,
+                    "accordion_icon": "caret",
+                    "accordion_dividers": true,
+                    "accordion_on_desktop": false,
+                    "inherit_color_scheme": true,
+                    "heading_preset": "paragraph",
+                    "link_preset": "paragraph",
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  }
+                },
+                "promo_card": {
+                  "type": "footer-promo-card",
+                  "settings": {
+                    "image": "shopify://shop_images/495665d329f0736322b64c887aa6e90a-desktop-I184923014387.jpg",
+                    "heading": "Find Your Filter",
+                    "link_text": "Lab Test Results"
+                  }
+                }
+              },
+              "block_order": [
+                "menu_shop",
+                "menu_tech",
+                "menu_support",
+                "menu_company",
+                "promo_card"
               ]
             }
           },
           "block_order": [
-            "contact_info",
-            "disclaimer_group",
-            "badges_group"
+            "newsletter_row",
+            "nav_promo_row"
           ]
         }
       },
       "block_order": [
-        "left_group",
-        "right_group"
+        "main_wrapper"
       ],
       "settings": {
         "section_width": "page-width",
-        "gap": 48,
-        "color_scheme": "scheme-8",
-        "padding-block-start": 40,
-        "padding-block-end": 60
+        "gap": 0,
+        "color_scheme": "scheme-9",
+        "padding-block-start": 60,
+        "padding-block-end": 40
       }
     },
     "utilities": {
       "type": "footer-utilities",
+      "blocks": {
+        "copyright": {
+          "type": "footer-copyright",
+          "settings": {
+            "show_powered_by": false,
+            "font_size": "0.875rem",
+            "case": "none"
+          }
+        },
+        "social_icons": {
+          "type": "social-links",
+          "settings": {
+            "instagram_url": "https://www.instagram.com/clearlyfiltered",
+            "facebook_url": "https://www.facebook.com/clearlyfiltered",
+            "linkedin_url": "https://www.linkedin.com/company/clearlyfiltered"
+          }
+        }
+      },
+      "block_order": [
+        "copyright",
+        "social_icons"
+      ],
       "settings": {
         "section_width": "page-width",
         "gap": 24,
-        "divider_thickness": 0,
-        "color_scheme": "scheme-8",
-        "padding-block-start": 0,
-        "padding-block-end": 0
+        "divider_thickness": 1,
+        "color_scheme": "scheme-9",
+        "padding-block-start": 20,
+        "padding-block-end": 20
       }
     }
   },
