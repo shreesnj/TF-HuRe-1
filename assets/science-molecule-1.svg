@@ -1,0 +1,9 @@
+<svg width="161" height="161" viewBox="0 0 161 161" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Outer circle -->
+  <circle cx="80.5" cy="80.5" r="80" stroke="#FFFFFF" stroke-width="0.5" fill="none"/>
+  <!-- Dots -->
+  <circle cx="56" cy="38" r="5" fill="#FFFFFF"/>
+  <circle cx="112" cy="52" r="5" fill="#FFFFFF"/>
+  <circle cx="80" cy="95" r="9" fill="#FFFFFF"/>
+  <circle cx="42" cy="110" r="4.5" fill="#FFFFFF"/>
+</svg>

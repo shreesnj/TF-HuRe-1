@@ -458,6 +458,55 @@
         "padding-block-start": 80,
         "padding-block-end": 80
       }
+    },
+    "science": {
+      "type": "science",
+      "blocks": {
+        "science_card_1": {
+          "type": "science-card",
+          "settings": {
+            "image": "shopify://shop_images/1-mobile-31613935.jpg",
+            "card_text": "By age 40, Humans naturally produce 50% less Nitric Oxide than they did at age 20.",
+            "molecule_icon": "science-molecule-1.svg",
+            "number": "01",
+            "card_title": "The Problem"
+          }
+        },
+        "science_card_2": {
+          "type": "science-card",
+          "settings": {
+            "image": "shopify://shop_images/2-mobile-31613943.jpg",
+            "card_text": "Nitric Oxide helps circulate more oxygen and nutrients to your 36 trillion cells.",
+            "molecule_icon": "science-molecule-2.svg",
+            "number": "02",
+            "card_title": "The Science"
+          }
+        },
+        "science_card_3": {
+          "type": "science-card",
+          "settings": {
+            "image": "shopify://shop_images/3-mobile-31613972.jpg",
+            "card_text": "More oxygen and nutrients means more healthy energy support.",
+            "molecule_icon": "science-molecule-3.svg",
+            "number": "03",
+            "card_title": "The Result"
+          }
+        }
+      },
+      "block_order": [
+        "science_card_1",
+        "science_card_2",
+        "science_card_3"
+      ],
+      "settings": {
+        "heading": "<p>Learn about the <strong>Miracle Molecule<\/strong><\/p>",
+        "subtitle": "Science grounded in the Nobel Prize-winning nitric oxide pathway.",
+        "button_text": "Explore Our Science",
+        "background_color": "#BC0F0F",
+        "color_scheme": "scheme-5",
+        "padding-block-start": 80,
+        "padding-block-end": 80
+      }
     }
   },
   "order": [
@@ -466,6 +515,7 @@
     "product_list_fa6P9H",
     "social_proof_reviews",
     "one_routine",
-    "backed_by"
+    "backed_by",
+    "science"
   ]
 }

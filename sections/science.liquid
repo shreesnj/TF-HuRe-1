@@ -1,0 +1,495 @@
+{%- liquid
+  assign heading = section.settings.heading
+  assign subtitle = section.settings.subtitle
+  assign button_text = section.settings.button_text
+  assign button_url = section.settings.button_url
+  assign background_color = section.settings.background_color
+-%}
+
+<div
+  id="Science-{{ section.id }}"
+  class="science spacing-style color-{{ section.settings.color_scheme }}"
+  style="
+    {% render 'spacing-style', settings: section.settings %}
+    --science-bg: {{ background_color }};
+  "
+>
+  <div class="science__content">
+    {% if heading != blank %}
+      <div class="science__heading">{{ heading }}</div>
+    {% endif %}
+    {% if subtitle != blank %}
+      <p class="science__subtitle">{{ subtitle }}</p>
+    {% endif %}
+
+    <science-cards class="science__cards">
+      {% for block in section.blocks %}
+        {%- liquid
+          if forloop.first
+            assign is_expanded = 'true'
+          else
+            assign is_expanded = 'false'
+          endif
+        -%}
+        <div
+          class="science__card"
+          data-expanded="{{ is_expanded }}"
+          data-index="{{ forloop.index0 }}"
+          {{ block.shopify_attributes }}
+        >
+          <div class="science__card-header">
+            <span class="science__card-number">{{ block.settings.number }}</span>
+            <span class="science__card-title">{{ block.settings.card_title }}</span>
+          </div>
+          <div class="science__card-body">
+            {% if block.settings.image != blank %}
+              {%- liquid
+                assign img = block.settings.image
+                assign sizes_val = '(min-width: 750px) 389px, 320px'
+              -%}
+              {{
+                img
+                | image_url: width: img.width
+                | image_tag:
+                  sizes: sizes_val,
+                  widths: '320,389,550,750,800',
+                  loading: 'lazy',
+                  class: 'science__card-bg',
+                  alt: img.alt
+              }}
+            {% endif %}
+            <div class="science__card-content">
+              {% if block.settings.molecule_icon != blank %}
+                <div class="science__card-molecule">
+                  <img
+                    src="{{ block.settings.molecule_icon | asset_url }}"
+                    alt=""
+                    loading="lazy"
+                  >
+                </div>
+              {% endif %}
+              {% if block.settings.card_text != blank %}
+                <p class="science__card-text">{{ block.settings.card_text }}</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </science-cards>
+
+    {% if button_text != blank %}
+      <div class="science__button-wrapper">
+        <a
+          {% if button_url != blank %}href="{{ button_url }}"{% endif %}
+          class="science__button"
+        >
+          {{ button_text }}
+        </a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .science {
+    background-color: var(--science-bg, #BC0F0F);
+  }
+
+  .science__content {
+    max-width: 1200px;
+    margin-inline: auto;
+    width: 100%;
+    padding-inline: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .science__heading {
+    font-family: var(--font-subheading--family);
+    font-weight: 400;
+    font-size: 48px;
+    line-height: 52px;
+    color: #FFFFFF;
+
+    & p {
+      margin: 0;
+    }
+
+    & strong {
+      font-family: var(--font-heading--family);
+      font-weight: 500;
+    }
+  }
+
+  .science__subtitle {
+    font-family: var(--font-heading--family);
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+    color: #FFFFFF;
+    margin: 0;
+  }
+
+  .science__cards {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+  }
+
+  .science__card {
+    flex: 1;
+    border-radius: 24px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .science__card-header {
+    display: none;
+  }
+
+  .science__card-body {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    padding: 32px 24px;
+    min-height: 480px;
+  }
+
+  .science__card-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+  }
+
+  .science__card-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .science__card-molecule {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .science__card-molecule img {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .science__card-text {
+    font-family: var(--font-subheading--family);
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 32px;
+    letter-spacing: -1px;
+    text-align: center;
+    color: #FFFFFF;
+    margin: 0;
+  }
+
+  .science__button-wrapper {
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
+  }
+
+  .science__button {
+    display: inline-block;
+    border-radius: 28px;
+    border: 2px solid #FFFFFF;
+    background: transparent;
+    padding: 12px 20px;
+    font-family: var(--font-accent--family);
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 16px;
+    letter-spacing: 0.75px;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    text-decoration: none;
+    box-sizing: border-box;
+    cursor: pointer;
+  }
+
+  @media screen and (max-width: 749px) {
+    .science__content {
+      padding-inline: 16px;
+      gap: 16px;
+    }
+
+    .science__heading {
+      line-height: 36px;
+      letter-spacing: -1px;
+    }
+
+    .science__subtitle {
+      font-size: 18px;
+      line-height: 20px;
+    }
+
+    .science__cards {
+      flex-direction: column;
+      gap: 0;
+      border-radius: 24px;
+      overflow: hidden;
+    }
+
+    .science__card {
+      border-radius: 24px 24px 0 0;
+    }
+
+    .science__card + .science__card {
+      margin-top: -24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .science__card-header {
+      display: flex;
+      flex-direction: row;
+      gap: 12px;
+      align-items: center;
+      padding: 20px 16px;
+    }
+
+    .science__card-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      min-width: 28px;
+      border-radius: 50%;
+      border: 1px solid #FFFFFF;
+      font-family: var(--font-accent--family);
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 18px;
+      letter-spacing: 0.75px;
+      text-transform: uppercase;
+      text-align: center;
+      color: #FFFFFF;
+      box-sizing: border-box;
+    }
+
+    .science__card-title {
+      font-family: var(--font-accent--family);
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 18px;
+      letter-spacing: 0.75px;
+      text-transform: uppercase;
+      color: #FFFFFF;
+    }
+
+    .science__card-text {
+      font-size: 24px;
+      line-height: 28px;
+    }
+
+    .science__button {
+      font-size: 14px;
+      line-height: 14px;
+    }
+
+    .science__button-wrapper {
+      justify-content: center;
+    }
+
+    /* Accordion behavior — only active when JS has initialized */
+    science-cards[data-accordion-active] .science__card[data-expanded="false"] {
+      cursor: pointer;
+    }
+
+    science-cards[data-accordion-active] .science__card[data-expanded="false"] .science__card-body {
+      display: none;
+    }
+
+    science-cards[data-accordion-active] .science__card[data-expanded="true"] {
+      cursor: default;
+    }
+  }
+{% endstylesheet %}
+
+<script>
+  if (!customElements.get('science-cards')) {
+    class ScienceCards extends HTMLElement {
+      connectedCallback() {
+        this.setAttribute('data-accordion-active', '');
+        this.addEventListener('click', this.handleClick.bind(this));
+      }
+
+      handleClick(event) {
+        if (window.innerWidth >= 750) return;
+
+        const card = event.target.closest('.science__card');
+        if (!card || !this.contains(card)) return;
+
+        if (card.dataset.expanded === 'true') return;
+
+        for (const c of this.querySelectorAll('.science__card')) {
+          c.dataset.expanded = (c === card) ? 'true' : 'false';
+        }
+      }
+    }
+
+    customElements.define('science-cards', ScienceCards);
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Science",
+  "tag": "section",
+  "class": "science-wrapper section-wrapper",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "<p>Learn about the <strong>Miracle Molecule</strong></p>"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Science grounded in the Nobel Prize-winning nitric oxide pathway."
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Explore Our Science"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Button URL"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#BC0F0F"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-5"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 80,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 80,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "science-card",
+      "name": "Science card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Background image"
+        },
+        {
+          "type": "textarea",
+          "id": "card_text",
+          "label": "Card text",
+          "default": "By age 40, Humans naturally produce 50% less Nitric Oxide than they did at age 20."
+        },
+        {
+          "type": "text",
+          "id": "molecule_icon",
+          "label": "Molecule icon filename",
+          "default": "science-molecule-1.svg"
+        },
+        {
+          "type": "text",
+          "id": "number",
+          "label": "Number",
+          "default": "01"
+        },
+        {
+          "type": "text",
+          "id": "card_title",
+          "label": "Card title",
+          "default": "The Problem"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Science",
+      "category": "t:categories.storytelling",
+      "blocks": [
+        {
+          "type": "science-card",
+          "settings": {
+            "card_text": "By age 40, Humans naturally produce 50% less Nitric Oxide than they did at age 20.",
+            "molecule_icon": "science-molecule-1.svg",
+            "number": "01",
+            "card_title": "The Problem"
+          }
+        },
+        {
+          "type": "science-card",
+          "settings": {
+            "card_text": "Nitric Oxide helps circulate more oxygen and nutrients to your 36 trillion cells.",
+            "molecule_icon": "science-molecule-2.svg",
+            "number": "02",
+            "card_title": "The Science"
+          }
+        },
+        {
+          "type": "science-card",
+          "settings": {
+            "card_text": "More oxygen and nutrients means more healthy energy support.",
+            "molecule_icon": "science-molecule-3.svg",
+            "number": "03",
+            "card_title": "The Result"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
