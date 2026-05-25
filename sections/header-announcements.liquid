@@ -36,6 +36,25 @@
   </announcement-bar-component>
 </aside>
 
+{% style %}
+  @media screen and (max-width: 749px) {
+    #shopify-section-{{ section.id }} .section-background,
+    #shopify-section-{{ section.id }} .announcement-bar {
+      --color-background: {{ section.settings.mobile_background }};
+    }
+
+    #shopify-section-{{ section.id }} .announcement-bar {
+      overflow: hidden;
+      padding-block: 8px;
+      padding-inline: 16px;
+    }
+
+    #shopify-section-{{ section.id }} .announcement-bar__slides {
+      max-width: none;
+    }
+  }
+{% endstyle %}
+
 {% stylesheet %}
   .announcement-bar {
     border-block-end: var(--border-bottom-width) solid var(--color-border);
@@ -167,6 +186,12 @@
       "id": "color_scheme",
       "default": "scheme-4",
       "label": "t:settings.color_scheme"
+    },
+    {
+      "type": "color",
+      "id": "mobile_background",
+      "label": "Mobile background",
+      "default": "#767676"
     },
     {
       "type": "range",
