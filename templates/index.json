@@ -18,7 +18,10 @@
         "overlay_color": "#0000004D",
         "overlay_color_mobile": "#0000007A",
         "section_height": "large",
-        "section_width": "full-width"
+        "section_width": "full-width",
+        "color_scheme": "scheme-6",
+        "padding-block-start": 40,
+        "padding-block-end": 40
       }
     },
     "hero_carousel": {
